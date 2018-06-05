@@ -13,26 +13,40 @@ function Square(props) {
 }
 
 function PlusMinus (props){
-
+  return (
+    <button 
+    className="plus-minus" 
+    onClick={props.onClick} >
+      {props.value}
+    </button>
+  );
 }
 
 function Score (props){
+  return (
+    <div class="score" id="1score" key="1score">0</div>
+  );
 
 }
 
 function ScoreBox (props){
 return (
   <div class="grid-wrapper">
-    <div class="item1">One</div>
-    <div>Two</div>
-    <div>Three</div>
+    <Score />
+    <PlusMinus value="+"/>
+    <PlusMinus value="-"/>
   </div>
-)
+);
 }
 
-// function ScoreBoard(props){
-//   return();
-// }
+function ScoreBoard(props){
+  return(
+    <div class="scoreboard">
+      <ScoreBox />
+      <ScoreBox />
+    </div>
+  );
+}
 
 class QuestionBoard extends React.Component {
   renderSquare(i) {
@@ -80,7 +94,7 @@ class Game extends React.Component {
   render() {
     return(
       <div>
-      <ScoreBox />
+      <ScoreBoard />
       <QuestionBoard />
       </div>
     );

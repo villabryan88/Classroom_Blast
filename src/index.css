@@ -34,6 +34,11 @@ body {
     flex-direction: column;
   }
 
+  .scoreboard {
+    display: flex;
+    justify-content: space-around;
+  }
+
  
   .status {
     margin-bottom: 10px;
@@ -58,7 +63,7 @@ body {
 
   .plus-minus {
    
-    background: #fff;
+    background: lightblue;
     border: 1px solid #999;
     float: left;
     font-size: 12px;
@@ -69,13 +74,12 @@ body {
 
   .score {
    
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
+    border: 2px solid black;
     font-size: 36px;
-    font-weight: normal;
     text-align: center;
-    display: block;
+    grid-column: 1 / span 2;
+    height: 8vw;
+    line-height:8vw;
     
   }
 
@@ -92,10 +96,7 @@ body {
     padding: 20px 0;
     font-size: 30px;
   }
-  .item1 {
-    grid-column: 1 / span 2;
-    height: 8vw;
-  }
+
 
   
   .square:focus {
