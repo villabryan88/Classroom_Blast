@@ -31,7 +31,7 @@ function Score (props){
 
 function ScoreBox (props){
 return (
-  <div class="grid-wrapper">
+  <div class="scorebox">
     <Score />
     <PlusMinus value="+"/>
     <PlusMinus value="-"/>
@@ -41,10 +41,14 @@ return (
 
 function ScoreBoard(props){
   return(
-    <div class="scoreboard">
-      <ScoreBox />
-      <ScoreBox />
-    </div>
+      <div class="scoreboard">
+        <ScoreBox />
+        <ScoreBox />
+        <ScoreBox />
+        <ScoreBox />
+        <ScoreBox />
+        <ScoreBox />
+      </div>
   );
 }
 
@@ -53,7 +57,7 @@ class QuestionBoard extends React.Component {
 
     return (
       <Square
-        value={i+1}
+        value={i}
         key = {i}
         class = "square"
       />
@@ -61,18 +65,14 @@ class QuestionBoard extends React.Component {
   }
 
   render() {
-    var emptyBoard = Array(6).fill(Array(8).fill(null));
-    var gameBoard = emptyBoard.map((rows,rowNum)=> {
-      var row= rows.map((empty,squareID) => this.renderSquare(rowNum*8+squareID));
-      return (
-        <div key={rowNum} className="board-row">
-          {row}
-        </div>
-      );
-    });   
+    var emptySquares = Array(48).fill(null);
+    var squares = emptySquares.map((e,squareID) => this.renderSquare(squareID+1));
+  
     return(
-      <div className="container" id="game-board">
-        {gameBoard}
+      <div className="container">
+        <div className="gameboard-wrapper" id="gameboard">
+          {squares}
+        </div>
       </div> 
     );
   }
