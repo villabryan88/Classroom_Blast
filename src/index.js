@@ -3,13 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
-var modal = document.getElementById('myModal');
 
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-} 
 
 
 class Modal extends React.Component{
@@ -20,12 +14,19 @@ class Modal extends React.Component{
     modal.style.display = "none";
   }
 
+  componentDidMount(){
+    var modal = document.getElementById('menuModal');
 
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    } 
+  }
 
 
   render() {
     return (
-
       <div id="menuModal" class="modal">
         <div class="modal-content">
           <span class="close" onClick={()=> this.closeHandleClick()}>&times;</span>
