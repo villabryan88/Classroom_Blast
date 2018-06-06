@@ -4,54 +4,9 @@ import './index.css';
 
 
 
-
-
-class Modal extends React.Component{
-
-  closeHandleClick() {
-    var modal = document.getElementById('menuModal');
-    var span = document.getElementsByClassName("close")[0];
-    modal.style.display = "none";
-  }
-
-  componentDidMount(){
-    var modal = document.getElementById('menuModal');
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    } 
-  }
-
-
-  render() {
-    return (
-      <div id="menuModal" class="modal">
-        <div class="modal-content">
-          <span class="close" onClick={()=> this.closeHandleClick()}>&times;</span>
-          <p>Some text in the Modal..</p>
-        </div>    
-      </div>
-    );
-  }
-}
-
-function Square(props) {
-  return (
-    <button 
-    className="square" 
-    onClick={props.onClick}  >
-      {props.value}
-    </button>
-  );
-}
-
-
-
 class  MenuBar extends React.Component {
   menuHandleClick() {
-    var modal = document.getElementById('menuModal');
+    var modal = document.getElementById(this.props.menuModal);
     modal.style.display = "block";
   }
 
@@ -69,14 +24,14 @@ class  MenuBar extends React.Component {
 }
 
 function ScoreBox (props){
-return (
-  <div class="scorebox">
-    <div class="flex-centered team-name"> Team 1</div>
-    <div class="flex-centered score" id="1score" key="1score">99</div>
-    <button className="plus-minus" onClick={props.onClick}>+</button>
-    <button className="plus-minus" onClick={props.onClick}>-</button>
-  </div>
-);
+  return (
+    <div class="scorebox">
+      <div class="flex-centered team-name"> Team 1</div>
+      <div class="flex-centered score" id="1score" key="1score">99</div>
+      <button className="plus-minus" onClick={props.onClick}>+</button>
+      <button className="plus-minus" onClick={props.onClick}>-</button>
+    </div>
+  );
 }
 
 function ScoreBoard(props){
@@ -94,9 +49,18 @@ function ScoreBoard(props){
   );
 }
 
+function Square(props) {
+  return (
+    <button 
+    className="square" 
+    onClick={props.onClick}  >
+      {props.value}
+    </button>
+  );
+}
+
 class QuestionBoard extends React.Component {
   renderSquare(i) {
-
     return (
       <Square
         value={i}
@@ -120,6 +84,35 @@ class QuestionBoard extends React.Component {
   }
 }
 
+class Modal extends React.Component{
+
+  closeHandleClick() {
+    var modal = document.getElementById(this.props.id);
+    modal.style.display = "none";
+  }
+
+  componentDidMount(){
+    window.onclick = function(event) {
+        if (event.target.className == "modal") {
+         event.target.style.display = "none";
+        }
+    } 
+  }
+
+
+  render() {
+    const id= this.props.id;
+    return (
+      <div id={id} key={id} class="modal">
+        <div class="modal-content">
+          <span class="close" onClick={()=> this.closeHandleClick()}>&times;</span>
+          <p>Some text in the Modal..</p>
+        </div>    
+      </div>
+    );
+  }
+}
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -136,10 +129,11 @@ class Game extends React.Component {
   render() {
     return(
       <div>
-      <MenuBar />
+      <MenuBar menuModal="menuModal"/>
       <ScoreBoard />
       <QuestionBoard />
-      <Modal />
+      <Modal id="menuModal"/>
+      <Modal id="questionModal" />
       </div>
     );
   }
