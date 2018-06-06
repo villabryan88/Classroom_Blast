@@ -58,23 +58,11 @@ body {
     
   }
 
-
-  .scorebox {
-    display: grid;
-    background-color: black;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: .3vh;
-    padding: .3vh;
-    width: 12vw;
-    min-height: 90%;
-  }
-
   .team-name{
     grid-column: 1 / span 2;
     background-color: lightgreen;
     font-size: 3vh;
   }
-
   .score {   
     background-color:white;
     grid-column: 1 / span 2;
@@ -83,11 +71,67 @@ body {
   .plus-minus {   
     background: lightblue;
     border: 1px solid #999;
-    float: left;
     font-size: 2vh;
     font-weight: normal;
     text-align: center;    
   }
+  .scorebox {
+    display: grid;
+    background-color: black;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: .3vh;
+    padding: .3vh;
+    min-width: 12vw;
+    min-height: 90%;
+  }
+
+
+  .score.small{   
+    font-size: 3vh;
+  }
+  .plus-minus.small{   
+    font-size: 1vh;
+  }
+  .scorebox.small {
+    grid-gap: .3vh;
+    padding: .3vh;
+    min-width: 4vw;
+  }
+
+
+  .score.medium{   
+    font-size: 5vh;
+  }
+  .plus-minus.medium{   
+    font-size: 2vh;
+  }
+  .scorebox.medium {
+    grid-gap: .3vh;
+    padding: .3vh;
+    min-width: 6vw;
+    min-height: 90%;
+  }
+
+
+
+
+  .menu-grid {
+    display: grid;
+    background-color: lightgoldenrodyellow;
+    border: 1px solid black;
+    grid-gap: 2px;
+    grid-template-columns: repeat(2, 1fr);
+    /* justify-items: center; */
+  }
+  .menu-grid > div {
+    display:flex;
+    background-color: lightpink;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+
   @media (orientation: portrait) {
     .square {
       font-size: 3.5vh;
@@ -115,17 +159,17 @@ body {
   }
 
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  padding-top: 5vh; 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
 }
 
 /* Modal Content */
@@ -134,7 +178,7 @@ body {
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 60%;
 }
 
 /* The Close Button */

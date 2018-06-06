@@ -12,8 +12,9 @@ class  MenuBar extends React.Component {
 
   render() {
     return (
-      <div class="flex menu-bar-container">
-        <div class="flex-centered menu-bar">
+      <div className="flex menu-bar-container">
+        <div className="flex-centered menu-bar">
+          <button>New Game</button>
           <button>forward</button>
           <button>reverse</button>
           <button onClick={()=>this.menuHandleClick()}>menu</button>
@@ -25,19 +26,19 @@ class  MenuBar extends React.Component {
 
 function ScoreBox (props){
   return (
-    <div class="scorebox">
-      <div class="flex-centered team-name"> Team 1</div>
-      <div class="flex-centered score" id="1score" key="1score">99</div>
-      <button className="plus-minus" onClick={props.onClick}>+</button>
-      <button className="plus-minus" onClick={props.onClick}>-</button>
+    <div className={"scorebox " + ((props.size) || "")}>
+      {props.noTeam ? '' :<div className="flex-centered team-name"> Team 1</div>}
+      <div className={"flex-centered score " + ((props.size) || "")} id="1score">99</div>
+      <button className={"plus-minus " + ((props.size) || "")} onClick={props.onClick}>+</button>
+      <button className={"plus-minus " + ((props.size) || "")} onClick={props.onClick}>-</button>
     </div>
   );
 }
 
 function ScoreBoard(props){
   return(
-    <div class="flex top-container">
-      <div class="flex-centered scoreboard">
+    <div className="flex top-container">
+      <div className="flex-centered scoreboard">
         <ScoreBox />
         <ScoreBox />
         <ScoreBox />
@@ -101,17 +102,81 @@ class Modal extends React.Component{
 
 
   render() {
-    const id= this.props.id;
     return (
-      <div id={id} key={id} class="modal">
-        <div class="modal-content">
-          <span class="close" onClick={()=> this.closeHandleClick()}>&times;</span>
-          <p>Some text in the Modal..</p>
+      <div id={this.props.id} className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={()=> this.closeHandleClick()}>&times;</span>
+          {this.props.children}
         </div>    
       </div>
     );
   }
 }
+
+class MenuPage extends React.Component {
+  render(){
+    return(
+      <Modal id={this.props.id}>
+        <h1 className="flex">Menu</h1>
+          <div className="menu-grid">
+            <div><h2>Teams</h2></div>
+            <div><ScoreBox noTeam="1" size="medium" /></div>
+            <div><h2>AI</h2></div>
+            <span style={{textAlign: "center"}}>
+              On:<input type="checkbox" />
+              <div>
+                <button>count</button>
+                <button>probability</button>
+              </div>
+            </span>
+            <span>
+              <div className="menu-grid" >
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+              </div>
+            </span>
+            <span>
+              <div className="menu-grid" >
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+                <div><h3>One</h3></div>
+                <div><ScoreBox noTeam="1" size="small" /></div>
+              </div>
+            </span>
+          </div>
+      </Modal>
+    )
+  }
+}
+// class QuestionPage extends React.Component{
+//   render(){
+
+//   }
+// }
+
+// class AnswerPage extends React.Component{
+//   render(){
+    
+//   }
+// }
+
+// class PrizePage extends React.Component{
+//   render(){
+    
+//   }
+// }
+
+
 
 class Game extends React.Component {
   constructor(props) {
@@ -132,7 +197,7 @@ class Game extends React.Component {
       <MenuBar menuModal="menuModal"/>
       <ScoreBoard />
       <QuestionBoard />
-      <Modal id="menuModal"/>
+      <MenuPage id="menuModal" />
       <Modal id="questionModal" />
       </div>
     );
