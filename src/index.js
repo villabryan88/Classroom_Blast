@@ -2,6 +2,40 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+
+var modal = document.getElementById('myModal');
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+} 
+
+
+class Modal extends React.Component{
+
+  closeHandleClick() {
+    var modal = document.getElementById('menuModal');
+    var span = document.getElementsByClassName("close")[0];
+    modal.style.display = "none";
+  }
+
+
+
+
+  render() {
+    return (
+
+      <div id="menuModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onClick={()=> this.closeHandleClick()}>&times;</span>
+          <p>Some text in the Modal..</p>
+        </div>    
+      </div>
+    );
+  }
+}
+
 function Square(props) {
   return (
     <button 
@@ -12,22 +46,32 @@ function Square(props) {
   );
 }
 
-function MenuBar(props){
-  return (
-    <div class="menu-bar-container">
-      <div class="menu-bar">
-        <button>forward</button>
-        <button>reverse</button>
-        <button>menu</button>
+
+
+class  MenuBar extends React.Component {
+  menuHandleClick() {
+    var modal = document.getElementById('menuModal');
+    modal.style.display = "block";
+  }
+
+  render() {
+    return (
+      <div class="flex menu-bar-container">
+        <div class="flex-centered menu-bar">
+          <button>forward</button>
+          <button>reverse</button>
+          <button onClick={()=>this.menuHandleClick()}>menu</button>
+        </div>
       </div>
-    </div>
-  )
+    );
+  }
 }
 
 function ScoreBox (props){
 return (
   <div class="scorebox">
-    <div class="score" id="1score" key="1score">99</div>
+    <div class="flex-centered team-name"> Team 1</div>
+    <div class="flex-centered score" id="1score" key="1score">99</div>
     <button className="plus-minus" onClick={props.onClick}>+</button>
     <button className="plus-minus" onClick={props.onClick}>-</button>
   </div>
@@ -36,8 +80,8 @@ return (
 
 function ScoreBoard(props){
   return(
-    <div class="top-container">
-      <div class="scoreboard">
+    <div class="flex top-container">
+      <div class="flex-centered scoreboard">
         <ScoreBox />
         <ScoreBox />
         <ScoreBox />
@@ -66,7 +110,7 @@ class QuestionBoard extends React.Component {
     var squares = emptySquares.map((e,squareID) => this.renderSquare(squareID+1));
   
     return(
-      <div className="bottom-container">
+      <div className="flex-centered bottom-container">
         <div className="gameboard-wrapper" id="gameboard">
           {squares}
         </div>
@@ -94,6 +138,7 @@ class Game extends React.Component {
       <MenuBar />
       <ScoreBoard />
       <QuestionBoard />
+      <Modal />
       </div>
     );
   }
