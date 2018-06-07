@@ -1,0 +1,242 @@
+﻿[
+ {
+   "instructions": "Fix the mistake",
+   "question": "Ben is the student that study everyday.",
+   "answer": "Ben is the student that studies everyday."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "running man is who the handsome bryan is",
+   "answer": "Bryan is the man who is running."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "car this the I is bought that ",
+   "answer": "This is the car that I bought."
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "お茶はたくさん世界中に楽しまれている飲み物です。",
+   "answer": "Tea is a drink which is enjoyed all over the world."
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "これはペルーからもらってコーヒーです。",
+   "answer": "This is the coffee I received from Peru."
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "彼の名前は何か知ってますか？",
+   "answer": "Do you know what his name is?"
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "図書館はどこですか知ってますか？",
+   "answer": "Do you know where the library is?"
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "I call her Bryan.",
+   "answer": "I call him Bryan."
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "私は彼をフランクと呼びます。",
+   "answer": "I call him Frank"
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "私は彼女をアナと呼びます。",
+   "answer": "I call her Ana"
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "I don't know what do to.",
+   "answer": "I don't know what to do."
+ },
+ {
+   "instructions": "Fill in the blank",
+   "question": "I don't remember when Halloween ____.",
+   "answer": "I don't remember when Halloween is."
+ },
+ {
+   "instructions": "Fill in the blank",
+   "question": "I know the shop ______ sells manga.",
+   "answer": "I know the shop that sells manga."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "I know where are my keys.",
+   "answer": "I know where my keys are."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "Do you know what time is it?",
+   "answer": "I know what time it is?"
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "それはけんだまと呼ばれている日本のおもちゃです。",
+   "answer": "It's a Japanese toy called a kendama."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "He knows who is that man.",
+   "answer": "He know who that man is."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "John is the man that he loves Jenny.",
+   "answer": "John is the man that loves Jenny."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "She call him Pepe.",
+   "answer": "She calls him Pepe."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "Tetris is a game enjoy by many people all over the world.",
+   "answer": "Tetris is a game enjoyed by many people all over the world."
+ },
+ {
+   "instructions": "Fill in the blank",
+   "question": "That is the temple built ____ Ashikaga Yoshimitsu. ",
+   "answer": "That is the temple built by Ashikaga Yoshimitsu."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "The girl who is sit down is my sister.",
+   "answer": "The girl who is sitting down is my sister."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "Mr.Kitagawa is the man that look very cool.",
+   "answer": "Mr. Kitagawa is the man who looks very cool"
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "あそこに立っている男性は私の兄です。",
+   "answer": "The man who is standing over there is my brother."
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "ここに座っている女性は私の姉です。",
+   "answer": "The woman sitting here is my sister."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "standing here my uncle is man the",
+   "answer": "The man standing there is my uncle."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "reading book a my uncle is man the",
+   "answer": "My uncle is the man reading a book."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "This is a phone who has a camera.",
+   "answer": "This is a phone that/which has a camera."
+ },
+ {
+   "instructions": "Fill in the blank",
+   "question": "This is the pen which was ______ in Taiwan.",
+   "answer": "This is the pen which was made in Taiwan."
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "これはタコスを売っているレストランです。",
+   "answer": "This is the restaurant that sells tacos."
+ },
+ {
+   "instructions": "Translate to English",
+   "question": "これはマンガがある店です。",
+   "answer": "This is the store that has manga."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "This is the restaurant who sells tacos.",
+   "answer": "This is the restaurant that/which sells tacos."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "car blue is the is this that",
+   "answer": "This is the car that is blue."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "ring the is this 100 was dollars which",
+   "answer": "This is the ring which was 100 dollars."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "Jen call her we.",
+   "answer": "We call her Jen."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "he who is know I don't",
+   "answer": "I don't know who he is."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "We call it Jenny.",
+   "answer": "We call her Jenny."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "what that know don't we is",
+   "answer": "We don't know what that is."
+ },
+ {
+   "instructions": "Put in order",
+   "question": "I what time is it know.",
+   "answer": "I know what time it is."
+ },
+ {
+   "instructions": "Fix the mistake",
+   "question": "We don't know what is that.",
+   "answer": "We don't know what that is."
+ },
+ {
+   "instructions": "Fill in the blank",
+   "question": "We usually ______ her Alex.",
+   "answer": "We usually call her Alex."
+ },
+ {
+   "instructions": "Fill in the blank",
+   "question": "Who is the girl who _______ just walked away?",
+   "answer": "Who is the girl who has just walked away?"
+ },
+ {
+   "instructions": "Translate to Japanese",
+   "question": "The woman who is standing over there is my aunt..",
+   "answer": "あそこに立っている女性は私のおばさんです。"
+ },
+ {
+   "instructions": "Translate to Japanese",
+   "question": "Do you know when Christmas is?",
+   "answer": "クリスマスはいつか知ってますか？"
+ },
+ {
+   "instructions": "Translate to Japanese",
+   "question": "Coffee is a drink which is enjoyed by many people.",
+   "answer": "コーヒーはたくさんの人に楽しまれている飲み物です。"
+ },
+ {
+   "instructions": "Translate to Japanese",
+   "question": "This is the place that sells books.",
+   "answer": "ここは本を売っているところです。"
+ },
+ {
+   "instructions": "Translate to Japanese",
+   "question": "It's a Japanese toy called a kendama.",
+   "answer": "それはけんだまと呼ばれている日本のおもちゃです。"
+ },
+ {
+   "instructions": "Translate to Japanese",
+   "question": "I call him Frank",
+   "answer": "私は彼をフランクと呼びます。"
+ }
+]

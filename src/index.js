@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import questionsData from './json/questionsData.json';
 
 
 
@@ -174,21 +175,34 @@ class MenuPage extends React.Component {
 
 
 
-// class QuestionPage extends React.Component{
-//   render(){
+class QuestionPage extends React.Component{
+  render(){
+    return (
+      <Modal id={this.props.id}>
+        <div class="flex instructions">{questionsData[this.props.currentQuestion-1]["instructions"]}</div>
+        <div class="flex question">{questionsData[this.props.currentQuestion-1]["question"]}</div>
+        <div class="flex answer">{questionsData[this.props.currentQuestion-1]["answer"]}</div>
+      </Modal>
+    )
 
-//   }
-// }
+  }
+}
 
 // class AnswerPage extends React.Component{
 //   render(){
-    
+      // return (
+      //   <Modal id={this.props.id}>
+      //   </Modal>
+      // )
 //   }
 // }
 
 // class PrizePage extends React.Component{
 //   render(){
-    
+      // return (
+      //   <Modal id={this.props.id}>
+      //   </Modal>
+      // )
 //   }
 // }
 
@@ -233,7 +247,7 @@ class Game extends React.Component {
       <ScoreBoard />
       <QuestionBoard onClick={(i,e) => this.handleClick(i,e)} questions={this.state.questionsToggle}/>
       <MenuPage id="menuModal" />
-      <Modal id="questionModal" />
+      <QuestionPage id="questionModal" currentQuestion={this.state.currentQuestion} />
       </div>
     );
   }
