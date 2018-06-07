@@ -67,6 +67,7 @@ class QuestionBoard extends React.Component {
         value={i}
         key = {i}
         class = "square"
+        onClick = {this.props.onClick}
       />
     );
   }
@@ -113,44 +114,53 @@ class Modal extends React.Component{
   }
 }
 
+function MenuItem(props){
+  const h = props.size == "small" ? 3: 2;
+  const Header = `h${h}`;
+
+
+  return (
+    <React.Fragment>
+      <div><Header children={props.item}/></div>
+      <div><ScoreBox noTeam="1" size={props.size} /></div>
+    </React.Fragment>
+  );
+}
+
 class MenuPage extends React.Component {
   render(){
     return(
       <Modal id={this.props.id}>
         <h1 className="flex">Menu</h1>
           <div className="menu-grid">
-            <div><h2>Teams</h2></div>
-            <div><ScoreBox noTeam="1" size="medium" /></div>
+
+            <MenuItem size="medium" item="Teams" />
+
             <div><h2>AI</h2></div>
-            <span style={{textAlign: "center"}}>
-              On:<input type="checkbox" />
-              <div>
+            <div><input type="checkbox" /></div>
+
+            <div><h2>Item Quantity</h2></div>
+            <div>
                 <button>count</button>
                 <button>probability</button>
+            </div>
+
+            <div style={{gridColumn:"1 / span 2", backgroundColor: "transparent"}}><h2>Item Counts</h2></div>
+
+            <span>
+              <div className="menu-grid" >
+                <MenuItem size="small" item="One" />
+                <MenuItem size="small" item="Two" />
+                <MenuItem size="small" item="Three" />
+                <MenuItem size="small" item="Four" />
               </div>
             </span>
             <span>
               <div className="menu-grid" >
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
-              </div>
-            </span>
-            <span>
-              <div className="menu-grid" >
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
-                <div><h3>One</h3></div>
-                <div><ScoreBox noTeam="1" size="small" /></div>
+                <MenuItem size="small" item="One" />
+                <MenuItem size="small" item="Two" />
+                <MenuItem size="small" item="Three" />
+                <MenuItem size="small" item="Four" />
               </div>
             </span>
           </div>
@@ -158,6 +168,9 @@ class MenuPage extends React.Component {
     )
   }
 }
+
+
+
 // class QuestionPage extends React.Component{
 //   render(){
 
@@ -186,6 +199,7 @@ class Game extends React.Component {
       score:  Array(6).fill(0),
       turnNumber:0,
       currentTeam: 1,
+      currentQuestion: 1,
       questionsToggle: Array(48).fill(true),
       winner: null,      
     };

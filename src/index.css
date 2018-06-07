@@ -90,7 +90,7 @@ body {
     font-size: 3vh;
   }
   .plus-minus.small{   
-    font-size: 1vh;
+    font-size: 2vh;
   }
   .scorebox.small {
     grid-gap: .3vh;
@@ -178,7 +178,11 @@ body {
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 60%;
+  width: 80%;
+}
+
+#menuModal > .modal-content {
+  width: 30%;
 }
 
 /* The Close Button */
