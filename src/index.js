@@ -54,7 +54,9 @@ function Square(props) {
   return (
     <button 
     className="square" 
-    onClick={props.onClick}  >
+    onClick={props.onClick}
+    style = {{backgroundColor : props.available ? "white" : "transparent" }}
+    >
       {props.value}
     </button>
   );
@@ -67,7 +69,8 @@ class QuestionBoard extends React.Component {
         value={i}
         key = {i}
         class = "square"
-        onClick = {this.props.onClick}
+        onClick = {(e) => this.props.onClick(i,e)}
+        available = {this.props.questions[i]}
       />
     );
   }
@@ -199,10 +202,28 @@ class Game extends React.Component {
       score:  Array(6).fill(0),
       turnNumber:0,
       currentTeam: 1,
-      currentQuestion: 1,
-      questionsToggle: Array(48).fill(true),
+      currentQuestion: 1, //maybe set to 0 and have a default blank 0 thing cause of async rendering
+      questionsToggle: Array(49).fill(true),
       winner: null,      
     };
+  }
+
+  handleClick(i,e){
+    const modal = document.getElementById("questionModal");
+    const square = e.target;
+    var questionsToggle = this.state.questionsToggle;
+    const available = questionsToggle[i];
+    questionsToggle[i] = !questionsToggle[i];
+    
+    this.setState ({
+      currentQuestion: i,
+      questionsToggle: questionsToggle
+    }); 
+
+    if (available)
+      modal.style.display = "block";
+
+
   }
 
   render() {
@@ -210,7 +231,7 @@ class Game extends React.Component {
       <div>
       <MenuBar menuModal="menuModal"/>
       <ScoreBoard />
-      <QuestionBoard />
+      <QuestionBoard onClick={(i,e) => this.handleClick(i,e)} questions={this.state.questionsToggle}/>
       <MenuPage id="menuModal" />
       <Modal id="questionModal" />
       </div>
