@@ -214,6 +214,10 @@ body {
     .top-container {
       height: 17vh;
     }
+    #menuModal > .modal-content {
+      width: 80%;
+      height: auto;
+    }
   }
 
 

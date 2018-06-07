@@ -144,10 +144,10 @@ class MenuPage extends React.Component {
             <div><input type="checkbox" /></div>
 
             <div><h2>Item Quantity</h2></div>
-            <div>
-                <button>count</button>
+            <span>
+                <button>count</button><br/>
                 <button>probability</button>
-            </div>
+            </span>
 
             <div style={{gridColumn:"1 / span 2", backgroundColor: "transparent"}}><h2>Item Counts</h2></div>
 
