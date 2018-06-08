@@ -134,7 +134,7 @@ function MenuItem(props){
 class MenuPage extends React.Component {
   render(){
     return(
-      <Modal id={this.props.id}>
+      <Modal id={this.props.id} display={this.props.display}>
         <h1 className="flex">Menu</h1>
           <div className="menu-grid">
 
@@ -269,6 +269,7 @@ class Game extends React.Component {
       winner: null,
       timer: 0,    
       questionPageDisplay: "none",  
+      menuPageDisplay: "block"
     };
   }
 
@@ -291,10 +292,10 @@ class Game extends React.Component {
   render() {
     return(
       <div>
-      <MenuBar menuModal="menuModal"/>
+      <MenuBar menuPageDisplay={this.state.menuPageDisplay}/>
       <ScoreBoard />
       <QuestionBoard onClick={(i,e) => this.handleClick(i,e)} questions={this.state.questionsToggle} />
-      <MenuPage id="menuModal" />
+      <MenuPage id="menuModal" display={this.state.menuPageDisplay}/>
       <QuestionPage id="questionModal" currentQuestion={this.state.currentQuestion} display={this.state.questionPageDisplay}/>
       </div>
     );
