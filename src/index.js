@@ -108,7 +108,7 @@ class Modal extends React.Component{
 
   render() {
     return (
-      <div id={this.props.id} className="modal">
+      <div id={this.props.id} className="modal" style={{display: this.props.display}}>
         <div className="modal-content">
           <span className="close" onClick={()=> this.closeHandleClick()}>&times;</span>
           {this.props.children}
@@ -173,15 +173,63 @@ class MenuPage extends React.Component {
   }
 }
 
+class Timer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {timer: 30}; 
+  }
 
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  
+  tick() {
+    if (this.state.date==0){
+      clearInterval(this.timerID);
+      return;
+    }
+
+    const time = this.state.timer-1;
+    this.setState({
+      timer: time
+    });
+  }
+
+  render() {
+    return (
+      <span class="timer">{this.state.timer}</span>
+    );
+  }
+}
 
 class QuestionPage extends React.Component{
+
+
+
+
+  componentWillUnmount() {
+    alert("goodbye");
+  }
+
   render(){
+    const currentQuestion = this.props.currentQuestion;
+    const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
+
     return (
-      <Modal id={this.props.id}>
-        <div class="flex instructions">{questionsData[this.props.currentQuestion-1]["instructions"]}</div>
-        <div class="flex question">{questionsData[this.props.currentQuestion-1]["question"]}</div>
-        <div class="flex answer">{questionsData[this.props.currentQuestion-1]["answer"]}</div>
+      <Modal id={this.props.id} display={this.props.display}>
+        <div class="flex instructions">{questionsData[questionsIndex]["instructions"]}</div>
+    {/* <span style={{float: "right"}}>{currentQuestion && ? <Timer /> : ""} </span> */}
+        <div class="flex question">{questionsData[questionsIndex]["question"]}</div>
+        <div class="flex answer">{questionsData[questionsIndex]["answer"]}</div>
+        
       </Modal>
     )
 
@@ -216,26 +264,26 @@ class Game extends React.Component {
       score:  Array(6).fill(0),
       turnNumber:0,
       currentTeam: 1,
-      currentQuestion: 1, //maybe set to 0 and have a default blank 0 thing cause of async rendering
+      currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
       questionsToggle: Array(49).fill(true),
-      winner: null,      
+      winner: null,
+      timer: 0,    
+      questionPageDisplay: "none",  
     };
   }
 
   handleClick(i,e){
-    const modal = document.getElementById("questionModal");
-    const square = e.target;
     var questionsToggle = this.state.questionsToggle;
     const available = questionsToggle[i];
     questionsToggle[i] = !questionsToggle[i];
-    
+ 
     this.setState ({
       currentQuestion: i,
       questionsToggle: questionsToggle
     }); 
 
     if (available)
-      modal.style.display = "block";
+      this.state.questionPageDisplay = "block";
 
 
   }
@@ -245,9 +293,9 @@ class Game extends React.Component {
       <div>
       <MenuBar menuModal="menuModal"/>
       <ScoreBoard />
-      <QuestionBoard onClick={(i,e) => this.handleClick(i,e)} questions={this.state.questionsToggle}/>
+      <QuestionBoard onClick={(i,e) => this.handleClick(i,e)} questions={this.state.questionsToggle} />
       <MenuPage id="menuModal" />
-      <QuestionPage id="questionModal" currentQuestion={this.state.currentQuestion} />
+      <QuestionPage id="questionModal" currentQuestion={this.state.currentQuestion} display={this.state.questionPageDisplay}/>
       </div>
     );
   }
