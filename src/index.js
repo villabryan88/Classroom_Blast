@@ -6,11 +6,6 @@ import questionsData from './json/questionsData.json';
 
 
 class  MenuBar extends React.Component {
-  menuHandleClick() {
-    var modal = document.getElementById(this.props.menuModal);
-    modal.style.display = "block";
-  }
-
   render() {
     return (
       <div className="flex menu-bar-container">
@@ -18,7 +13,7 @@ class  MenuBar extends React.Component {
           <button>New Game</button>
           <button>forward</button>
           <button>reverse</button>
-          <button onClick={()=>this.menuHandleClick()}>menu</button>
+          <button onClick={this.props.onClick}>menu</button>
         </div>
       </div>
     );
@@ -70,7 +65,7 @@ class QuestionBoard extends React.Component {
         value={i}
         key = {i}
         class = "square"
-        onClick = {(e) => this.props.onClick(i,e)}
+        onClick = {() => this.props.onClick(i)}
         available = {this.props.questions[i]}
       />
     );
@@ -98,11 +93,11 @@ class Modal extends React.Component{
   }
 
   componentDidMount(){
-    window.onclick = function(event) {
-        if (event.target.className == "modal") {
-         event.target.style.display = "none";
-        }
-    } 
+    // window.onclick = function(event) {
+    //     if (event.target.className == "modal") {
+    //      event.target.style.display = "none";
+    //     }
+    // } 
   }
 
 
@@ -110,7 +105,7 @@ class Modal extends React.Component{
     return (
       <div id={this.props.id} className="modal" style={{display: this.props.display}}>
         <div className="modal-content">
-          <span className="close" onClick={()=> this.closeHandleClick()}>&times;</span>
+          <span className="close" onClick={this.props.onClick}>&times;</span>
           {this.props.children}
         </div>    
       </div>
@@ -134,7 +129,7 @@ function MenuItem(props){
 class MenuPage extends React.Component {
   render(){
     return(
-      <Modal id={this.props.id} display={this.props.display}>
+      <Modal id={this.props.id} display={this.props.display} onClick={this.props.onClick} >
         <h1 className="flex">Menu</h1>
           <div className="menu-grid">
 
@@ -224,9 +219,9 @@ class QuestionPage extends React.Component{
     const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
 
     return (
-      <Modal id={this.props.id} display={this.props.display}>
+      <Modal id={this.props.id} display={this.props.display} onClick= {this.props.onClick}>
         <div class="flex instructions">{questionsData[questionsIndex]["instructions"]}</div>
-    {/* <span style={{float: "right"}}>{currentQuestion && ? <Timer /> : ""} </span> */}
+        <span style={{float: "right"}}>{this.props.display == "none" || <Timer /> } </span>
         <div class="flex question">{questionsData[questionsIndex]["question"]}</div>
         <div class="flex answer">{questionsData[questionsIndex]["answer"]}</div>
         
@@ -269,11 +264,11 @@ class Game extends React.Component {
       winner: null,
       timer: 0,    
       questionPageDisplay: "none",  
-      menuPageDisplay: "block"
+      menuPageDisplay: "none"
     };
   }
 
-  handleClick(i,e){
+  handleClick(i){  //I don't like how dirty this looks
     var questionsToggle = this.state.questionsToggle;
     const available = questionsToggle[i];
     questionsToggle[i] = !questionsToggle[i];
@@ -285,18 +280,22 @@ class Game extends React.Component {
 
     if (available)
       this.state.questionPageDisplay = "block";
+  }
 
-
+  modalHandleClick(modal) {
+    var obj = {};
+    obj[modal] = this.state[modal] == "none" ? "block" : "none";
+    this.setState(obj);
   }
 
   render() {
     return(
       <div>
-      <MenuBar menuPageDisplay={this.state.menuPageDisplay}/>
+      <MenuBar onClick={() => this.modalHandleClick("menuPageDisplay")}/>
       <ScoreBoard />
-      <QuestionBoard onClick={(i,e) => this.handleClick(i,e)} questions={this.state.questionsToggle} />
-      <MenuPage id="menuModal" display={this.state.menuPageDisplay}/>
-      <QuestionPage id="questionModal" currentQuestion={this.state.currentQuestion} display={this.state.questionPageDisplay}/>
+      <QuestionBoard onClick={(i) => this.handleClick(i)} questions={this.state.questionsToggle} />
+      <MenuPage display={this.state.menuPageDisplay} onClick={() => this.modalHandleClick("menuPageDisplay")}/>
+      <QuestionPage currentQuestion={this.state.currentQuestion} display={this.state.questionPageDisplay} onClick={() => this.modalHandleClick("questionPageDisplay")}/>
       </div>
     );
   }
