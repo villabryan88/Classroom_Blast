@@ -76,12 +76,13 @@ body {
     text-align: center;    
   }
   .scorebox {
+    flex:1;
     display: grid;
     background-color: black;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: .3vh;
     padding: .3vh;
-    min-width: 12vw;
+    max-width: 12vw;
     min-height: 90%;
   }
 
