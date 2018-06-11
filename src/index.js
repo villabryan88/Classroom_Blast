@@ -222,6 +222,11 @@ class QuestionPage extends React.Component{
     this.setState({answerVisible: true});
   }
 
+  closeOnClick(){
+    this.setState({answerVisible: false});
+    this.props.closeOnClick();
+  }
+
 
   componentWillUnmount() {
     alert("goodbye");
@@ -232,7 +237,7 @@ class QuestionPage extends React.Component{
     const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
 
     return (
-      <Modal id={this.props.id} display={this.props.display} closeOnClick= {this.props.closeOnClick}>
+      <Modal id={this.props.id} display={this.props.display} closeOnClick= {() => this.closeOnClick()}>
         <div class="flex instructions">{questionsData[questionsIndex]["instructions"]}</div>
         <span style={{float: "right"}}>{this.props.display == "none" || <Timer timer={this.props.timer}/> } </span>
         <div class="flex question">{questionsData[questionsIndex]["question"]}</div>
