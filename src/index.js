@@ -10,10 +10,14 @@ class  MenuBar extends React.Component {
     return (
       <div className="flex menu-bar-container">
         <div className="flex-centered menu-bar">
-          <button>New Game</button>
-          <button>forward</button>
-          <button>reverse</button>
-          <button onClick={this.props.menuOnClick}>menu</button>
+          <div className="flex-content">
+            <button onClick={this.props.newGameOnClick}>New Game</button>
+          </div>
+          <div className="flex-content flex flex-right">
+            <button onClick={() => this.props.navigationOnClick("plus")}>forward</button>
+            <button onClick={() => this.props.navigationOnClick("minus")}>reverse</button>
+            <button onClick={this.props.menuOnClick}>menu</button>
+          </div>
         </div>
       </div>
     );
@@ -24,7 +28,12 @@ function ScoreBox (props){
   return (
     <div className={"scorebox " + ((props.size) || "")}>
       {!props.team ? '' :<div className="flex-centered team-name"> Team {props.team}</div>}
-      <div className={"flex-centered score " + ((props.size) || "")} id="1score">{props.settings}</div>
+      <div
+        className={"flex-centered score " + ((props.size) || "")}
+        id="1score"        
+        style={props.team == props.currentTeam ? {backgroundColor: "lightGreen"}: {}}>
+          {props.settings}
+      </div>
       <button className={"plus-minus " + ((props.size) || "")} onClick={() => props.settingsOnClick("plus")}>+</button>
       <button className={"plus-minus " + ((props.size) || "")} onClick={() => props.settingsOnClick("minus")}>-</button>
     </div>
@@ -42,6 +51,8 @@ class ScoreBoard extends React.Component{
       scoreBoard[i] = <ScoreBox 
         settings={this.props.score[i]} 
         team = {i+1}
+        key = {i}
+        currentTeam = {this.props.currentTeam}
         settingsOnClick={(plusMinus) => this.props.scoreOnClick(i, plusMinus, "score")}
       />;
     }
@@ -129,14 +140,14 @@ class MenuPage extends React.Component {
             <MenuItem size="medium" item="Teams" settings={this.props.settings.teams} settingsOnClick={(plusMinus) => this.props.settingsOnClick("teams", plusMinus)}/>
             <MenuItem size="medium" item="Timer" settings={this.props.settings.timer} settingsOnClick={(plusMinus) => this.props.settingsOnClick("timer", plusMinus)}/>
 
-            <div><h2>AI</h2></div>
+            {/* <div><h2>AI</h2></div>
             <div><input type="checkbox" /></div>
 
             <div><h2>Item Quantity</h2></div>
             <span>
                 <button>count</button><br/>
                 <button>probability</button>
-            </span>
+            </span> */}
 
             <div style={{gridColumn:"1 / span 2", backgroundColor: "transparent"}}><h2>Item Counts</h2></div>
 
@@ -200,8 +211,16 @@ class Timer extends React.Component {
 }
 
 class QuestionPage extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      answerVisible: false
+    }
+  }
 
-
+  answerOnClick(){
+    this.setState({answerVisible: true});
+  }
 
 
   componentWillUnmount() {
@@ -217,7 +236,10 @@ class QuestionPage extends React.Component{
         <div class="flex instructions">{questionsData[questionsIndex]["instructions"]}</div>
         <span style={{float: "right"}}>{this.props.display == "none" || <Timer timer={this.props.timer}/> } </span>
         <div class="flex question">{questionsData[questionsIndex]["question"]}</div>
-        <div class="flex answer">{questionsData[questionsIndex]["answer"]}</div>
+        <div class="flex answer">
+          {!this.state.answerVisible ?  <button onClick={() => this.answerOnClick()}>Answer</button>
+          : questionsData[questionsIndex]["answer"]}
+        </div>
         
       </Modal>
     )
@@ -251,7 +273,6 @@ class Game extends React.Component {
     this.state = {
       score:  Array(6).fill(0),
       turnNumber:0,
-      currentTeam: 1,
       currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
       questionsToggle: Array(49).fill(true),
       winner: null, 
@@ -267,7 +288,8 @@ class Game extends React.Component {
         five: 10,
         stealThree: 10,
         stealHalf: 10,
-        enemiesHalf: 10
+        enemiesHalf: 10,      
+        currentTeam: 1,
       }
     };
   }
@@ -290,7 +312,7 @@ class Game extends React.Component {
   }
 
 
-  settingsHandleClick(setting, plusMinus, type){
+  settingsHandleClick(setting, plusMinus, type){ //starting to handle too much
     var score = this.state.score.slice();
     var settings = Object.assign({},this.state.settings);
     var state = {};
@@ -304,12 +326,34 @@ class Game extends React.Component {
     
     
     if (plusMinus == "plus")
-      newState[setting] = newState[setting] + 1
+      newState[setting] = newState[setting] + 1;
     else if (newState[setting] > 0)
-      newState[setting] = newState[setting] - 1
+      newState[setting] = newState[setting] - 1;
 
     if (state.score.length < state.settings.teams)
       state.score[state.settings.teams-1] = 0;
+
+    state.settings.currentTeam = state.settings.currentTeam % state.settings.teams;
+    if (state.settings.currentTeam == 0)
+      state.settings.currentTeam = state.settings.teams;
+
+    this.setState(state);
+  }
+
+  reset() {
+    var state = {
+      score:  Array(6).fill(0),
+      turnNumber:0,
+      currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
+      questionsToggle: Array(49).fill(true),
+      winner: null, 
+      questionPageDisplay: "none",  
+      menuPageDisplay: "none",
+    }
+    var settings = Object.assign({},this.state.settings);
+    settings.currentTeam = 1;
+    state.settings = settings;
+
 
     this.setState(state);
   }
@@ -335,10 +379,15 @@ class Game extends React.Component {
     var settings = this.state.settings;
     return(
       <div>
-      <MenuBar menuOnClick={() => this.modalOpenCloseHandleClick("menuPageDisplay")}/>
+      <MenuBar 
+        menuOnClick={() => this.modalOpenCloseHandleClick("menuPageDisplay")}
+        navigationOnClick = {(plusMinus) => this.settingsHandleClick("currentTeam",plusMinus)}
+        newGameOnClick = {() => this.reset()}
+      />
       <ScoreBoard 
         score={this.state.score} 
         teams={this.state.settings.teams}
+        currentTeam = {this.state.settings.currentTeam}
         scoreOnClick = {(setting, plusMinus, score) => this.settingsHandleClick(setting,plusMinus,score)} 
       />
       <QuestionBoard 

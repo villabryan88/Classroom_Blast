@@ -17,6 +17,15 @@ body {
     justify-content: center;
     align-items: center;
   }
+  .flex-content {
+    flex:1;
+  }
+  .flex-right {
+    justify-content: flex-end;    
+  }
+  .flex-left {
+    justify-content: flex-start;    
+  }
 
   .menu-bar-container{
     height: 5vh;
