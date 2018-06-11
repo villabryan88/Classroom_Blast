@@ -108,7 +108,7 @@ class QuestionBoard extends React.Component {
 class Modal extends React.Component{
   render() {
     return (
-      <div id={this.props.id} className="modal" style={{display: this.props.display}}>
+      <div id={this.props.id} className="modal">
         <div className="modal-content">
           <span className="close" onClick={this.props.closeOnClick}>&times;</span>
           {this.props.children}
@@ -133,7 +133,7 @@ function MenuItem(props){
 class MenuPage extends React.Component {
   render(){
     return(
-      <Modal id="menuModal" display={this.props.display} closeOnClick={this.props.closeOnClick} >
+      <Modal id="menuModal" closeOnClick={this.props.closeOnClick} >
         <h1 className="flex">Menu</h1>
           <div className="menu-grid">
 
@@ -222,24 +222,14 @@ class QuestionPage extends React.Component{
     this.setState({answerVisible: true});
   }
 
-  closeOnClick(){
-    this.setState({answerVisible: false});
-    this.props.closeOnClick();
-  }
-
-
-  componentWillUnmount() {
-    alert("goodbye");
-  }
-
   render(){
     const currentQuestion = this.props.currentQuestion;
     const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
 
     return (
-      <Modal id={this.props.id} display={this.props.display} closeOnClick= {() => this.closeOnClick()}>
+      <Modal id={this.props.id}  closeOnClick= {this.props.closeOnClick}>
         <div class="flex instructions">{questionsData[questionsIndex]["instructions"]}</div>
-        <span style={{float: "right"}}>{this.props.display == "none" || <Timer timer={this.props.timer}/> } </span>
+        <span style={{float: "right"}}><Timer timer={this.props.timer}/></span>
         <div class="flex question">{questionsData[questionsIndex]["question"]}</div>
         <div class="flex answer">
           {!this.state.answerVisible ?  <button onClick={() => this.answerOnClick()}>Answer</button>
@@ -281,8 +271,7 @@ class Game extends React.Component {
       currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
       questionsToggle: Array(49).fill(true),
       winner: null, 
-      questionPageDisplay: "none",  
-      menuPageDisplay: "none",
+      currentModal: null,
       settings: {
         teams: 6,
         timer: 30,
@@ -311,7 +300,7 @@ class Game extends React.Component {
 
     if (available){
       this.setState({
-        questionPageDisplay: "block"
+        currentModal: "questionPage"
       });
     }
   }
@@ -352,8 +341,6 @@ class Game extends React.Component {
       currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
       questionsToggle: Array(49).fill(true),
       winner: null, 
-      questionPageDisplay: "none",  
-      menuPageDisplay: "none",
     }
     var settings = Object.assign({},this.state.settings);
     settings.currentTeam = 1;
@@ -364,28 +351,46 @@ class Game extends React.Component {
   }
 
   modalOpenCloseHandleClick(modal) {
-    var obj = {};
-    obj[modal] = this.state[modal] == "none" ? "block" : "none";
-    this.setState(obj);
+    this.setState({currentModal: modal});
   }
 
   componentDidMount(){
     window.onclick = (e) => {
-      if (e.target.className == "modal") {
-        this.setState({
-          questionPageDisplay: "none",  
-          menuPageDisplay: "none"
-        })
-      }
+      if (e.target.className == "modal") 
+        this.setState({currentModal: null});      
     } 
+  }
+
+  renderModal() {
+    var settings = this.state.settings;
+    const currentModal = this.state.currentModal;
+    const modal = (currentModal) =>{ switch (currentModal) {
+      case 'menuPage':
+        return <MenuPage
+          settings={settings}
+          closeOnClick={() => this.modalOpenCloseHandleClick(null)}
+          settingsOnClick = {(setting, plusMinus) => this.settingsHandleClick(setting,plusMinus)} />;
+  
+      case 'questionPage':
+        return <QuestionPage
+          currentQuestion={this.state.currentQuestion}
+          timer = {this.state.settings.timer}
+          closeOnClick={() => this.modalOpenCloseHandleClick(null)}/>;
+  
+      default:
+        return null;
+    }};
+
+    return (modal(currentModal));
   }
 
   render() {
     var settings = this.state.settings;
+    var modal = this.renderModal();    
     return(
       <div>
       <MenuBar 
-        menuOnClick={() => this.modalOpenCloseHandleClick("menuPageDisplay")}
+        menuOnClick={() => this.modalOpenCloseHandleClick("menuPage")}
         navigationOnClick = {(plusMinus) => this.settingsHandleClick("currentTeam",plusMinus)}
         newGameOnClick = {() => this.reset()}
       />
@@ -399,17 +404,7 @@ class Game extends React.Component {
         onClick={(i) => this.handleClick(i)} 
         questions={this.state.questionsToggle} 
       />
-      <MenuPage
-        display={this.state.menuPageDisplay}
-        settings={settings}
-        closeOnClick={() => this.modalOpenCloseHandleClick("menuPageDisplay")}
-        settingsOnClick = {(setting, plusMinus) => this.settingsHandleClick(setting,plusMinus)} 
-      />
-      <QuestionPage
-        currentQuestion={this.state.currentQuestion}
-        display={this.state.questionPageDisplay}
-        timer = {this.state.settings.timer}
-        closeOnClick={() => this.modalOpenCloseHandleClick("questionPageDisplay")}/>
+      {modal}
       </div> 
     );
   }
