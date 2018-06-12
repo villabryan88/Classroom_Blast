@@ -95,32 +95,32 @@ body {
     min-height: 90%;
   }
 
-
-  .score.small{   
-    font-size: 3vh;
-  }
-  .plus-minus.small{   
-    font-size: 2vh;
-  }
   .scorebox.small {
     grid-gap: .3vh;
     padding: .3vh;
     min-width: 4vw;
   }
-
-
-  .score.medium{   
-    font-size: 5vh;
+  .scorebox.small > .score{   
+    font-size: 3vh;
   }
-  .plus-minus.medium{   
+  .scorebox.small > .plus-minus{   
     font-size: 2vh;
   }
+
+
   .scorebox.medium {
     grid-gap: .3vh;
     padding: .3vh;
     min-width: 6vw;
     min-height: 90%;
   }
+  .scorebox.medium > .score{   
+    font-size: 5vh;
+  }
+  .scorebox.medium > .plus-minus{   
+    font-size: 2vh;
+  }
+
 
   .modal {
     display: block; 

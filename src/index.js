@@ -4,7 +4,6 @@ import './index.css';
 import questionsData from './json/questionsData.json';
 
 
-
 class  MenuBar extends React.Component {
   render() {
     return (
@@ -25,35 +24,36 @@ class  MenuBar extends React.Component {
 }
 
 function ScoreBox (props){
+  const scoreBoxClass = "scorebox " + ((props.size) || "");
+  const teamElement = !props.team ? '' :<div className="flex-centered team-name"> Team {props.team}</div>;
+  const scoreHighlight = props.team == props.currentTeam ? {backgroundColor: "lightGreen"}: {};
+
   return (
-    <div className={"scorebox " + ((props.size) || "")}>
-      {!props.team ? '' :<div className="flex-centered team-name"> Team {props.team}</div>}
+    <div className={scoreBoxClass}>
+      {teamElement}
       <div
-        className={"flex-centered score " + ((props.size) || "")}
-        id="1score"        
-        style={props.team == props.currentTeam ? {backgroundColor: "lightGreen"}: {}}>
-          {props.settings}
+        className="flex-centered score"
+        style={scoreHighlight}>
+          {props.value}
       </div>
-      <button className={"plus-minus " + ((props.size) || "")} onClick={() => props.settingsOnClick("plus")}>+</button>
-      <button className={"plus-minus " + ((props.size) || "")} onClick={() => props.settingsOnClick("minus")}>-</button>
+      <button className="plus-minus" onClick={() => props.plusMinusOnClick("plus")}>+</button>
+      <button className="plus-minus" onClick={() => props.plusMinusOnClick("minus")}>-</button>
     </div>
   );
 }
 
 class ScoreBoard extends React.Component{
-  // renderScoreBox (i){
-     
-  // }
+
   render (){
     var scoreBoard = [];
 
     for (let i=0; i< this.props.teams; i++){
       scoreBoard[i] = <ScoreBox 
-        settings={this.props.score[i]} 
+        value={this.props.score[i]} 
         team = {i+1}
         key = {i}
         currentTeam = {this.props.currentTeam}
-        settingsOnClick={(plusMinus) => this.props.scoreOnClick(i, plusMinus, "score")}
+        plusMinusOnClick={(plusMinus) => this.props.scoreOnClick(i, plusMinus, "score")}
       />;
     }
     return(
@@ -69,9 +69,9 @@ class ScoreBoard extends React.Component{
 function Square(props) {
   return (
     <button 
-    className="square" 
-    onClick={props.onClick}
-    style = {{backgroundColor : props.available ? "white" : "transparent" }}
+      className="square" 
+      onClick={props.onClick}
+      style = {{backgroundColor : props.available ? "white" : "transparent" }}
     >
       {props.value}
     </button>
@@ -125,7 +125,7 @@ function MenuItem(props){
   return (
     <React.Fragment>
       <div><Header children={props.item}/></div>
-      <div><ScoreBox team={0} size={props.size} settings={props.settings} settingsOnClick={props.settingsOnClick}/></div>
+      <div><ScoreBox team={0} size={props.size} value={props.value} plusMinusOnClick={props.plusMinusOnClick}/></div>
     </React.Fragment>
   );
 }
@@ -137,8 +137,8 @@ class MenuPage extends React.Component {
         <h1 className="flex">Menu</h1>
           <div className="menu-grid">
 
-            <MenuItem size="medium" item="Teams" settings={this.props.settings.teams} settingsOnClick={(plusMinus) => this.props.settingsOnClick("teams", plusMinus)}/>
-            <MenuItem size="medium" item="Timer" settings={this.props.settings.timer} settingsOnClick={(plusMinus) => this.props.settingsOnClick("timer", plusMinus)}/>
+            <MenuItem size="medium" item="Teams" value={this.props.settings.teams} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("teams", plusMinus)}/>
+            <MenuItem size="medium" item="Timer" value={this.props.settings.timer} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("timer", plusMinus)}/>
 
             {/* <div><h2>AI</h2></div>
             <div><input type="checkbox" /></div>
@@ -150,21 +150,24 @@ class MenuPage extends React.Component {
             </span> */}
 
             <div style={{gridColumn:"1 / span 2", backgroundColor: "transparent"}}><h2>Item Counts</h2></div>
-
+            {/* would like to automate this part. create a items in game state, if in settings avoid adding new prop to pass down
+                but then have to see reprecussions of having object in object. probably will have to deep clone somwhere.  
+                if new state object then have to add another state to pass down. kinda lame
+                will hold off for now */}
             <span>
               <div className="menu-grid" >
-                <MenuItem size="small" item="One"  settings={this.props.settings.one} settingsOnClick={(plusMinus) => this.props.settingsOnClick("one", plusMinus)}/>
-                <MenuItem size="small" item="Two"  settings={this.props.settings.two} settingsOnClick={(plusMinus) => this.props.settingsOnClick("two", plusMinus)}/>
-                <MenuItem size="small" item="Three"  settings={this.props.settings.three} settingsOnClick={(plusMinus) => this.props.settingsOnClick("three", plusMinus)}/>
-                <MenuItem size="small" item="Four"  settings={this.props.settings.four} settingsOnClick={(plusMinus) => this.props.settingsOnClick("four", plusMinus)}/>
+                <MenuItem size="small" item="One"  value={this.props.settings.one} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("one", plusMinus)}/>
+                <MenuItem size="small" item="Two"  value={this.props.settings.two} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("two", plusMinus)}/>
+                <MenuItem size="small" item="Three"  value={this.props.settings.three} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("three", plusMinus)}/>
+                <MenuItem size="small" item="Four"  value={this.props.settings.four} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("four", plusMinus)}/>
               </div>
             </span>
             <span>
               <div className="menu-grid" >
-                <MenuItem size="small" item="Five"  settings={this.props.settings.five} settingsOnClick={(plusMinus) => this.props.settingsOnClick("five", plusMinus)}/>
-                <MenuItem size="small" item="Steal Three"  settings={this.props.settings.stealThree} settingsOnClick={(plusMinus) => this.props.settingsOnClick("stealThree", plusMinus)}/>
-                <MenuItem size="small" item="Steal Half"  settings={this.props.settings.stealHalf} settingsOnClick={(plusMinus) => this.props.settingsOnClick("stealHalf", plusMinus)}/>
-                <MenuItem size="small" item="Enemies Half"  settings={this.props.settings.enemiesHalf} settingsOnClick={(plusMinus) => this.props.settingsOnClick("enemiesHalf", plusMinus)}/>
+                <MenuItem size="small" item="Five"  value={this.props.settings.five} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("five", plusMinus)}/>
+                <MenuItem size="small" item="Steal Three"  value={this.props.settings.stealThree} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("stealThree", plusMinus)}/>
+                <MenuItem size="small" item="Steal Half"  value={this.props.settings.stealHalf} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("stealHalf", plusMinus)}/>
+                <MenuItem size="small" item="Enemies Half"  value={this.props.settings.enemiesHalf} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("enemiesHalf", plusMinus)}/>
               </div>
             </span>
           </div> 
@@ -214,7 +217,8 @@ class QuestionPage extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      answerVisible: false
+      answerVisible: false,
+      fontSize: 200
     }
   }
 
@@ -222,17 +226,47 @@ class QuestionPage extends React.Component{
     this.setState({answerVisible: true});
   }
 
+  fitSize() {
+    var instructions = document.getElementById("instructions");
+      var fontSize = this.state.fontSize;
+    
+    this.componentDidUpdate = () => {
+      var instructions = document.getElementById("instructions");
+      var fontSize = this.state.fontSize;
+      if (instructions.offsetHeight < instructions.scrollHeight)
+        this.setState({fontSize: fontSize-5});
+    }
+    if (instructions.offsetHeight < instructions.scrollHeight)
+      this.setState({fontSize: fontSize-5});
+  }
+
+  componentDidMount(){
+    this.fitSize();
+  }
+
+
+
   render(){
     const currentQuestion = this.props.currentQuestion;
     const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
+    const fontSize = this.state.fontSize + "px";
+    var style = {fontSize: fontSize};
+
 
     return (
       <Modal id={this.props.id}  closeOnClick= {this.props.closeOnClick}>
-        <div class="flex instructions">{questionsData[questionsIndex]["instructions"]}</div>
-        <span style={{float: "right"}}><Timer timer={this.props.timer}/></span>
-        <div class="flex question">{questionsData[questionsIndex]["question"]}</div>
-        <div class="flex answer">
-          {!this.state.answerVisible ?  <button onClick={() => this.answerOnClick()}>Answer</button>
+        <div id="instructions" style={style} class="flex-centered instructions">
+          {questionsData[questionsIndex]["instructions"]}
+        </div>
+        <span style={{float: "right"}}>
+          <Timer timer={this.props.timer}/>
+        </span>
+        <div class="flex-centered question">
+          {questionsData[questionsIndex]["question"]}
+        </div>
+        <div class="flex-centered answer">
+          {!this.state.answerVisible ?  
+            <button onClick={() => this.answerOnClick()}>Answer</button>
           : questionsData[questionsIndex]["answer"]}
         </div>
         
@@ -274,7 +308,8 @@ class Game extends React.Component {
       currentModal: null,
       settings: {
         teams: 6,
-        timer: 30,
+        timer: 30,              
+        currentTeam: 1,
         one: 10,
         two: 10,
         three: 10,
@@ -282,31 +317,30 @@ class Game extends React.Component {
         five: 10,
         stealThree: 10,
         stealHalf: 10,
-        enemiesHalf: 10,      
-        currentTeam: 1,
+        enemiesHalf: 10,
       }
     };
   }
 
-  handleClick(i){  //I don't like how dirty this looks
+  handleClick(i){
     var questionsToggle = this.state.questionsToggle;
     const available = questionsToggle[i];
+    var currentModal= null;
+
+    if (available)
+      currentModal = "questionPage";
+
     questionsToggle[i] = !questionsToggle[i];
  
     this.setState ({
       currentQuestion: i,
-      questionsToggle: questionsToggle
+      questionsToggle: questionsToggle,
+      currentModal: currentModal
     }); 
-
-    if (available){
-      this.setState({
-        currentModal: "questionPage"
-      });
-    }
-  }
+ }
 
 
-  settingsHandleClick(setting, plusMinus, type){ //starting to handle too much
+  plusMinusHandleClick(setting, plusMinus, type){ //starting to handle too much
     var score = this.state.score.slice();
     var settings = Object.assign({},this.state.settings);
     var state = {};
@@ -338,7 +372,7 @@ class Game extends React.Component {
     var state = {
       score:  Array(6).fill(0),
       turnNumber:0,
-      currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
+      currentQuestion: 0, 
       questionsToggle: Array(49).fill(true),
       winner: null, 
     }
@@ -364,12 +398,13 @@ class Game extends React.Component {
   renderModal() {
     var settings = this.state.settings;
     const currentModal = this.state.currentModal;
+
     const modal = (currentModal) =>{ switch (currentModal) {
       case 'menuPage':
         return <MenuPage
           settings={settings}
           closeOnClick={() => this.modalOpenCloseHandleClick(null)}
-          settingsOnClick = {(setting, plusMinus) => this.settingsHandleClick(setting,plusMinus)} />;
+          plusMinusOnClick = {(setting, plusMinus) => this.plusMinusHandleClick(setting,plusMinus)} />;
   
       case 'questionPage':
         return <QuestionPage
@@ -385,20 +420,19 @@ class Game extends React.Component {
   }
 
   render() {
-    var settings = this.state.settings;
     var modal = this.renderModal();    
     return(
       <div>
       <MenuBar 
         menuOnClick={() => this.modalOpenCloseHandleClick("menuPage")}
-        navigationOnClick = {(plusMinus) => this.settingsHandleClick("currentTeam",plusMinus)}
+        navigationOnClick = {(plusMinus) => this.plusMinusHandleClick("currentTeam",plusMinus)}
         newGameOnClick = {() => this.reset()}
       />
       <ScoreBoard 
         score={this.state.score} 
         teams={this.state.settings.teams}
         currentTeam = {this.state.settings.currentTeam}
-        scoreOnClick = {(setting, plusMinus, score) => this.settingsHandleClick(setting,plusMinus,score)} 
+        scoreOnClick = {(setting, plusMinus, score) => this.plusMinusHandleClick(setting,plusMinus,score)} 
       />
       <QuestionBoard 
         onClick={(i) => this.handleClick(i)} 
