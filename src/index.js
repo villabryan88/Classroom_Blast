@@ -212,7 +212,51 @@ class Timer extends React.Component {
     );
   }
 }
+class FullText extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      fontSize: 200
+    }
+  }
 
+  componentDidUpdate(){
+    var element = document.getElementById(this.props.id);
+    var fontSize = this.state.fontSize;
+    if (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth)
+      this.setState({fontSize: fontSize-5});
+  }
+
+
+  componentDidMount(){
+    this.componentDidUpdate(); 
+    var oldOnResize = window.onresize;    
+    window.onresize=()=> {
+      this.setState({fontSize: 200});
+      if (typeof oldOnResize === "function")
+        oldOnResize();
+    }
+  }
+
+  componentWillUnmount(){
+    window.onresize = null;
+  }
+
+  render() {
+    const fontSize = this.state.fontSize + "px";
+    var style = {
+      fontSize: fontSize,
+      height: "100%",
+      textAlign: "center",
+    };
+
+    return(
+      <div id={this.props.id} style={style}>
+        {this.props.children}
+      </div>
+    );
+  }
+}
 class QuestionPage extends React.Component{
   constructor(props){
     super(props);
@@ -225,49 +269,30 @@ class QuestionPage extends React.Component{
   answerOnClick(){
     this.setState({answerVisible: true});
   }
-
-  fitSize() {
-    var instructions = document.getElementById("instructions");
-      var fontSize = this.state.fontSize;
-    
-    this.componentDidUpdate = () => {
-      var instructions = document.getElementById("instructions");
-      var fontSize = this.state.fontSize;
-      if (instructions.offsetHeight < instructions.scrollHeight)
-        this.setState({fontSize: fontSize-5});
-    }
-    if (instructions.offsetHeight < instructions.scrollHeight)
-      this.setState({fontSize: fontSize-5});
-  }
-
-  componentDidMount(){
-    this.fitSize();
-  }
-
-
-
   render(){
     const currentQuestion = this.props.currentQuestion;
     const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
     const fontSize = this.state.fontSize + "px";
     var style = {fontSize: fontSize};
+    var answerElement = (!this.state.answerVisible ? 
+      <button onClick={() => this.answerOnClick()}>Answer</button> :
+      <FullText id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>);
+
 
 
     return (
       <Modal id={this.props.id}  closeOnClick= {this.props.closeOnClick}>
-        <div id="instructions" style={style} class="flex-centered instructions">
-          {questionsData[questionsIndex]["instructions"]}
+        <div id="instructions" class="flex-centered instructions">
+          <FullText id="instructionsSize">{questionsData[questionsIndex]["instructions"]}</FullText>
         </div>
         <span style={{float: "right"}}>
           <Timer timer={this.props.timer}/>
         </span>
         <div class="flex-centered question">
-          {questionsData[questionsIndex]["question"]}
+          <FullText id="questionSize">{questionsData[questionsIndex]["question"]}</FullText>
         </div>
         <div class="flex-centered answer">
-          {!this.state.answerVisible ?  
-            <button onClick={() => this.answerOnClick()}>Answer</button>
-          : questionsData[questionsIndex]["answer"]}
+          {answerElement}
         </div>
         
       </Modal>
