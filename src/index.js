@@ -220,7 +220,10 @@ class FullText extends React.Component{
     }
   }
 
+
   componentDidUpdate(){
+    if (this.props.id=="questionSize");
+    console.log("update "+ this.props.id)
     var element = document.getElementById(this.props.id);
     var fontSize = this.state.fontSize;
     if (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth)
@@ -246,17 +249,19 @@ class FullText extends React.Component{
     const fontSize = this.state.fontSize + "px";
     var style = {
       fontSize: fontSize,
-      height: "100%",
+      height: "90%",
+      width: "90%",
       textAlign: "center",
     };
 
     return(
-      <div id={this.props.id} style={style}>
-        {this.props.children}
+      <div id={this.props.id} class="flex-centered full-text" style={style}>
+        <div>{this.props.children}</div>
       </div>
     );
   }
 }
+
 class QuestionPage extends React.Component{
   constructor(props){
     super(props);
@@ -274,22 +279,31 @@ class QuestionPage extends React.Component{
     const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
     const fontSize = this.state.fontSize + "px";
     var style = {fontSize: fontSize};
+
+    const displayAnswer = (
+    <div class="flex fill">
+      <div class="flex-centered flex-content9">
+        <FullText key="4" id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>        
+      </div>
+      <div class="flex-content flex-centered">
+        <button onClick={this.props.continueOnClick}>Continue</button>
+      </div>
+     </div>);
+
     var answerElement = (!this.state.answerVisible ? 
       <button onClick={() => this.answerOnClick()}>Answer</button> :
-      <FullText id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>);
-
-
+      displayAnswer);
 
     return (
       <Modal id={this.props.id}  closeOnClick= {this.props.closeOnClick}>
         <div id="instructions" class="flex-centered instructions">
-          <FullText id="instructionsSize">{questionsData[questionsIndex]["instructions"]}</FullText>
+          <FullText key="1" id="instructionsSize">{questionsData[questionsIndex]["instructions"]}</FullText>
         </div>
         <span style={{float: "right"}}>
-          <Timer timer={this.props.timer}/>
+          <Timer key="2"  timer={this.props.timer}/>
         </span>
         <div class="flex-centered question">
-          <FullText id="questionSize">{questionsData[questionsIndex]["question"]}</FullText>
+          <FullText key="3"  id="questionSize">{questionsData[questionsIndex]["question"]}</FullText>
         </div>
         <div class="flex-centered answer">
           {answerElement}
@@ -301,14 +315,14 @@ class QuestionPage extends React.Component{
   }
 }
 
-// class AnswerPage extends React.Component{
-//   render(){
-      // return (
-      //   <Modal id={this.props.id}>
-      //   </Modal>
-      // )
-//   }
-// }
+class AnswerPage extends React.Component{
+  render(){
+      return (
+        <Modal id={this.props.id}>
+        </Modal>
+      )
+  }
+}
 
 // class PrizePage extends React.Component{
 //   render(){
@@ -347,7 +361,7 @@ class Game extends React.Component {
     };
   }
 
-  handleClick(i){
+  squareHandleClick(i){
     var questionsToggle = this.state.questionsToggle;
     const available = questionsToggle[i];
     var currentModal= null;
@@ -363,7 +377,6 @@ class Game extends React.Component {
       currentModal: currentModal
     }); 
  }
-
 
   plusMinusHandleClick(setting, plusMinus, type){ //starting to handle too much
     var score = this.state.score.slice();
@@ -435,7 +448,8 @@ class Game extends React.Component {
         return <QuestionPage
           currentQuestion={this.state.currentQuestion}
           timer = {this.state.settings.timer}
-          closeOnClick={() => this.modalOpenCloseHandleClick(null)}/>;
+          closeOnClick={() => this.modalOpenCloseHandleClick(null)}
+          continueOnClick = {() => this.modalOpenCloseHandleClick("answerPage")} />;
   
       default:
         return null;
@@ -460,7 +474,7 @@ class Game extends React.Component {
         scoreOnClick = {(setting, plusMinus, score) => this.plusMinusHandleClick(setting,plusMinus,score)} 
       />
       <QuestionBoard 
-        onClick={(i) => this.handleClick(i)} 
+        onClick={(i) => this.squareHandleClick(i)} 
         questions={this.state.questionsToggle} 
       />
       {modal}
