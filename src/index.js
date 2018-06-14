@@ -216,18 +216,19 @@ class FullText extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      fontSize: 200
+      fontSize: 200,
+      resize: true
     }
   }
 
 
   componentDidUpdate(){
-    if (this.props.id=="questionSize");
-    console.log("update "+ this.props.id)
     var element = document.getElementById(this.props.id);
     var fontSize = this.state.fontSize;
-    if (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth)
+    if (this.state.resize && (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth))
       this.setState({fontSize: fontSize-5});
+    else if (this.state.resize)
+      this.setState({resize: false})
   }
 
 
@@ -235,7 +236,10 @@ class FullText extends React.Component{
     this.componentDidUpdate(); 
     var oldOnResize = window.onresize;    
     window.onresize=()=> {
-      this.setState({fontSize: 200});
+      this.setState({
+        fontSize: 200,
+        resize: true
+      });
       if (typeof oldOnResize === "function")
         oldOnResize();
     }
