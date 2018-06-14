@@ -302,12 +302,12 @@ class QuestionPage extends React.Component{
       <Modal id={this.props.id}  closeOnClick= {this.props.closeOnClick}>
         <div id="instructions" class="flex-centered instructions">
           <FullText key="1" id="instructionsSize">{questionsData[questionsIndex]["instructions"]}</FullText>
-        </div>
-        <span style={{float: "right"}}>
-          <Timer key="2"  timer={this.props.timer}/>
-        </span>
+        </div>        
         <div class="flex-centered question">
           <FullText key="3"  id="questionSize">{questionsData[questionsIndex]["question"]}</FullText>
+          <span class="timer">
+            <Timer key="2"  timer={this.props.timer}/>
+          </span>
         </div>
         <div class="flex-centered answer">
           {answerElement}
