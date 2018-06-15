@@ -108,7 +108,7 @@ class QuestionBoard extends React.Component {
 class Modal extends React.Component{
   render() {
     return (
-      <div className="modal">
+      <div id={this.props.id} className="modal">
         <div className="modal-content">
           <span className="close" onClick={this.props.closeOnClick}>&times;</span>
           {this.props.children}
@@ -133,7 +133,7 @@ function MenuItem(props){
 class MenuPage extends React.Component {
   render(){
     return(
-      <Modal id="menuModal" closeOnClick={this.props.closeOnClick} >
+      <Modal id="menu-modal" closeOnClick={this.props.closeOnClick} >
         <h1 className="flex">Menu</h1>
           <div className="menu-grid">
 
@@ -433,9 +433,13 @@ class Game extends React.Component {
     else if (newState[setting] > 0)
       newState[setting] = newState[setting] - 1;
 
+    //make sure score matches teams
     if (state.score.length < state.settings.teams)
       state.score[state.settings.teams-1] = 0;
+    if (state.score.length > state.settings.teams)
+      state.score.pop();
 
+    //moving around current team highlighter
     state.settings.currentTeam = state.settings.currentTeam % state.settings.teams;
     if (state.settings.currentTeam == 0)
       state.settings.currentTeam = state.settings.teams;
@@ -464,7 +468,31 @@ class Game extends React.Component {
   }
 
   teamHandleClick(team){
-    this.setState({winner: team});
+    if (this.state.winner === team)
+      this.pickPrize();
+    else
+      this.setState({winner: team});    
+  }
+
+  pickPrize (){
+    var prize = ai();
+    var turnNumber = this.state.turnNumber+1;
+    var rank = rankScore();
+
+    function ai(){
+
+    }
+
+  }
+  
+  rankScore(){
+    var scoreRanked = this.state.score.slice();
+    scoreRanked.sort();
+    scoreRanked.reverse();  
+
+    var rank = this.state.score.map(score => scoreRanked.indexOf(score)+1);
+
+    return rank;
   }
 
   componentDidMount(){

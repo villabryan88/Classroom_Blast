@@ -161,13 +161,13 @@ body {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid rgb(63, 37, 37);
     width: 80%;
     height: 88%;
   }
   
-  #menuModal > .modal-content {
-    width: 30%;
+  #menu-modal > .modal-content {
+    width: 30vw;
     height: auto;
   }
   
