@@ -69,9 +69,9 @@ class ScoreBoard extends React.Component{
 function Square(props) {
   return (
     <button 
-      className="square" 
+      class={props.class}
       onClick={props.onClick}
-      style = {{backgroundColor : props.available ? "white" : "transparent" }}
+      style = {props.style}
     >
       {props.value}
     </button>
@@ -86,7 +86,7 @@ class QuestionBoard extends React.Component {
         key = {i}
         class = "square"
         onClick = {() => this.props.onClick(i)}
-        available = {this.props.questions[i]}
+        style = {{backgroundColor : this.props.questions[i] ? "white" : "transparent" }}
       />
     );
   }
@@ -108,7 +108,7 @@ class QuestionBoard extends React.Component {
 class Modal extends React.Component{
   render() {
     return (
-      <div id={this.props.id} className="modal">
+      <div className="modal">
         <div className="modal-content">
           <span className="close" onClick={this.props.closeOnClick}>&times;</span>
           {this.props.children}
@@ -226,7 +226,7 @@ class FullText extends React.Component{
     var element = document.getElementById(this.props.id);
     var fontSize = this.state.fontSize;
     if (this.state.resize && (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth))
-      this.setState({fontSize: fontSize-5});
+      this.setState({fontSize: fontSize-1});
     else if (this.state.resize)
       this.setState({resize: false})
   }
@@ -256,6 +256,7 @@ class FullText extends React.Component{
       height: "90%",
       width: "90%",
       textAlign: "center",
+      whiteSpace: this.props.noWrap ? "nowrap": "normal",
     };
 
     return(
@@ -287,7 +288,7 @@ class QuestionPage extends React.Component{
     const displayAnswer = (
     <div class="flex fill">
       <div class="flex-centered flex-content9">
-        <FullText key="4" id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>        
+        <FullText id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>        
       </div>
       <div class="flex-content flex-centered">
         <button onClick={this.props.continueOnClick}>Continue</button>
@@ -299,14 +300,14 @@ class QuestionPage extends React.Component{
       displayAnswer);
 
     return (
-      <Modal id={this.props.id}  closeOnClick= {this.props.closeOnClick}>
+      <Modal closeOnClick= {this.props.closeOnClick}>
         <div id="instructions" class="flex-centered instructions">
-          <FullText key="1" id="instructionsSize">{questionsData[questionsIndex]["instructions"]}</FullText>
+          <FullText id="instructionsSize">{questionsData[questionsIndex]["instructions"]}</FullText>
         </div>        
         <div class="flex-centered question">
-          <FullText key="3"  id="questionSize">{questionsData[questionsIndex]["question"]}</FullText>
+          <FullText id="questionSize">{questionsData[questionsIndex]["question"]}</FullText>
           <span class="timer">
-            <Timer key="2"  timer={this.props.timer}/>
+            <Timer timer={this.props.timer}/>
           </span>
         </div>
         <div class="flex-centered answer">
@@ -320,21 +321,53 @@ class QuestionPage extends React.Component{
 }
 
 class AnswerPage extends React.Component{
+  renderTeam(i) {
+    return (
+      <Square
+        value={"Team "+ (i+1)}
+        key = {i}
+        class = "team-button"
+        onClick = {() => this.props.teamOnClick(i)}
+        style = {{backgroundColor : this.props.winner == i ? "green" : "white" }}
+      />
+    );
+  }
+
   render(){
+    const currentQuestion = this.props.currentQuestion;
+    const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
+
+    var emptyTeamList = Array(6).fill(null);
+    var teamList = emptyTeamList.map((e,teamID) => this.renderTeam(teamID));
+  
+
       return (
-        <Modal id={this.props.id}>
+        <Modal closeOnClick= {this.props.closeOnClick}>
+        <div class="answer-page">
+          <div class="who-won">
+            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Who won?</FullText></div>
+            <div class="flex-centered-column team-list">
+              {teamList}
+            </div>
+          </div>
+          <div class='flex-centered answer-box'>
+            <FullText id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>
+          </div>
+        </div>
+          
         </Modal>
       )
   }
 }
 
 // class PrizePage extends React.Component{
-//   render(){
-      // return (
-      //   <Modal id={this.props.id}>
-      //   </Modal>
-      // )
-//   }
+  // render(){
+  //   return (
+  //     <Modal closeOnClick= {this.props.closeOnClick}>
+        
+  //     </Modal>
+  //   )
+  // }
 // }
 
 
@@ -430,6 +463,10 @@ class Game extends React.Component {
     this.setState({currentModal: modal});
   }
 
+  teamHandleClick(team){
+    this.setState({winner: team});
+  }
+
   componentDidMount(){
     window.onclick = (e) => {
       if (e.target.className == "modal") 
@@ -454,6 +491,12 @@ class Game extends React.Component {
           timer = {this.state.settings.timer}
           closeOnClick={() => this.modalOpenCloseHandleClick(null)}
           continueOnClick = {() => this.modalOpenCloseHandleClick("answerPage")} />;
+
+      case 'answerPage':
+        return <AnswerPage          
+          closeOnClick={() => this.modalOpenCloseHandleClick(null)} 
+          teamOnClick = {(team) => this.teamHandleClick(team)}
+          winner= {this.state.winner}/>;
   
       default:
         return null;
