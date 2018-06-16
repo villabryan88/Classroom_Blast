@@ -156,18 +156,18 @@ class MenuPage extends React.Component {
                 will hold off for now */}
             <span>
               <div className="menu-grid" >
-                <MenuItem size="small" item="One"  value={this.props.settings.one} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("one", plusMinus)}/>
-                <MenuItem size="small" item="Two"  value={this.props.settings.two} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("two", plusMinus)}/>
-                <MenuItem size="small" item="Three"  value={this.props.settings.three} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("three", plusMinus)}/>
-                <MenuItem size="small" item="Four"  value={this.props.settings.four} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("four", plusMinus)}/>
+                <MenuItem size="small" item="One"  value={this.props.items.one} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("one", plusMinus)}/>
+                <MenuItem size="small" item="Two"  value={this.props.items.two} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("two", plusMinus)}/>
+                <MenuItem size="small" item="Three"  value={this.props.items.three} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("three", plusMinus)}/>
+                <MenuItem size="small" item="Four"  value={this.props.items.four} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("four", plusMinus)}/>
               </div>
             </span>
             <span>
               <div className="menu-grid" >
-                <MenuItem size="small" item="Five"  value={this.props.settings.five} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("five", plusMinus)}/>
-                <MenuItem size="small" item="Steal Three"  value={this.props.settings.stealThree} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("stealThree", plusMinus)}/>
-                <MenuItem size="small" item="Steal Half"  value={this.props.settings.stealHalf} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("stealHalf", plusMinus)}/>
-                <MenuItem size="small" item="Enemies Half"  value={this.props.settings.enemiesHalf} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("enemiesHalf", plusMinus)}/>
+                <MenuItem size="small" item="Five"  value={this.props.items.five} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("five", plusMinus)}/>
+                <MenuItem size="small" item="Steal Three"  value={this.props.items.stealThree} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("stealThree", plusMinus)}/>
+                <MenuItem size="small" item="Steal Half"  value={this.props.items.stealHalf} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("stealHalf", plusMinus)}/>
+                <MenuItem size="small" item="Enemies Half"  value={this.props.items.enemiesHalf} plusMinusOnClick={(plusMinus) => this.props.plusMinusOnClick("enemiesHalf", plusMinus)}/>
               </div>
             </span>
           </div> 
@@ -228,7 +228,7 @@ class FullText extends React.Component{
     var element = document.getElementById(this.props.id);
     var fontSize = this.state.fontSize;
     if (this.state.resize && (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth))
-      this.setState({fontSize: fontSize-1});
+      this.setState({fontSize: fontSize-5});
     else if (this.state.resize)
       this.setState({resize: false})
   }
@@ -388,6 +388,8 @@ class Game extends React.Component {
         teams: 6,
         timer: 30,              
         currentTeam: 1,
+      },
+      items: {
         one: 10,
         two: 10,
         three: 10,
@@ -419,15 +421,19 @@ class Game extends React.Component {
 
   plusMinusHandleClick(setting, plusMinus, type){ //starting to handle too much
     var score = this.state.score.slice();
-    var settings = Object.assign({},this.state.settings);
+    var settings = Object.assign({},this.state.settings);    
+    var items = Object.assign({},this.state.items);
     var state = {};
     state.score = score;
     state.settings = settings;
+    state.items = items;
     
     if (type) 
       var newState = score;
-    else 
+    else if (settings[setting])
       var newState = settings;
+    else
+      var newState = items;
     
     
     if (plusMinus == "plus")
@@ -479,10 +485,10 @@ class Game extends React.Component {
   pickPrize (){
     var prize = ai();
     var turnNumber = this.state.turnNumber+1;
-    var rank = rankScore();
+    var rank = this.rankScore();
 
     function ai(){
-
+      alert("hello");
     }
 
   }
@@ -512,6 +518,7 @@ class Game extends React.Component {
       case 'menuPage':
         return <MenuPage
           settings={settings}
+          items = {this.state.items}
           closeOnClick={() => this.modalOpenCloseHandleClick(null)}
           plusMinusOnClick = {(setting, plusMinus) => this.plusMinusHandleClick(setting,plusMinus)} />;
   
