@@ -321,8 +321,7 @@ class QuestionPage extends React.Component{
 
   }
 }
-
-class AnswerPage extends React.Component{
+class TeamList extends React.Component{
   renderTeam(i) {
     return (
       <Square
@@ -335,42 +334,50 @@ class AnswerPage extends React.Component{
     );
   }
 
+  render (){
+    var emptyTeamList = Array(this.props.teams).fill(null);
+    var teamList = emptyTeamList.map((e,teamID) => this.renderTeam(teamID));
+    
+
+    return(
+      <div class="flex-centered-column team-list">
+        {teamList}
+      </div>
+    )
+  }
+}
+
+class AnswerPage extends React.Component{
+
   render(){
     const currentQuestion = this.props.currentQuestion;
     const questionsIndex = currentQuestion > 0 ? currentQuestion-1: 0;
 
-    var emptyTeamList = Array(6).fill(null);
-    var teamList = emptyTeamList.map((e,teamID) => this.renderTeam(teamID));
-  
-
-      return (
-        <Modal closeOnClick= {this.props.closeOnClick}>
+    return (
+      <Modal closeOnClick= {this.props.closeOnClick}>
         <div class="answer-page">
           <div class="who-won">
-            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Who won?</FullText></div>
-            <div class="flex-centered-column team-list">
-              {teamList}
-            </div>
+            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Who won?</FullText></div>            
+            <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
           <div class='flex-centered answer-box'>
             <FullText id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>
           </div>
-        </div>
-          
-        </Modal>
-      )
+        </div>        
+      </Modal>
+    )
   }
 }
 
-// class PrizePage extends React.Component{
-  // render(){
-  //   return (
-  //     <Modal closeOnClick= {this.props.closeOnClick}>
-        
-  //     </Modal>
-  //   )
-  // }
-// }
+class PrizePage extends React.Component{
+  render(){
+    return (
+      <Modal closeOnClick= {this.props.closeOnClick}>
+        {this.props.prize}
+      </Modal>
+    )
+  }
+}
 
 
 
@@ -383,6 +390,7 @@ class Game extends React.Component {
       currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
       questionsToggle: Array(49).fill(true),
       winner: null, 
+      prize: null,
       currentModal: null,
       settings: {
         teams: 6,
@@ -476,20 +484,56 @@ class Game extends React.Component {
   }
 
   teamHandleClick(team){
-    if (this.state.winner === team)
-      this.pickPrize();
+    if (this.state.winner === team){
+      var prize = this.pickPrize();
+      var currentModal;
+      
+
+      switch (prize){
+        // case "stealThree":
+        // case "stealHalf":
+        //   alert("stealPrizePage");
+        //   break;
+        
+        default:
+          currentModal = "prizePage";
+          break;
+      }
+
+      this.setState({
+        prize: prize,
+        currentModal: currentModal
+      });
+    }
     else
       this.setState({winner: team});    
   }
 
   pickPrize (){
-    var prize = ai();
+    
+    const itemsState = Object.assign({},this.state.items);    
     var turnNumber = this.state.turnNumber+1;
     var rank = this.rankScore();
+    var prize = ai();
 
     function ai(){
-      alert("hello");
+      var items = itemsState;
+      const itemsValues = Object.values(items);
+      const itemsNames = Object.keys(items);
+      const reducer = (d,i) => d + i;
+      const itemsTotal = itemsValues.reduce(reducer);
+      const prize = Math.floor(Math.random() * itemsTotal);
+      var prizeIterator = 0;
+      var prizeIndex;
+
+      for (let i=0; prizeIterator <= prize; i++){
+        prizeIndex = i;
+        prizeIterator = prizeIterator + itemsValues[i];
+      }
+      return itemsNames[prizeIndex];
     }
+
+    return prize;
 
   }
   
@@ -530,10 +574,17 @@ class Game extends React.Component {
           continueOnClick = {() => this.modalOpenCloseHandleClick("answerPage")} />;
 
       case 'answerPage':
-        return <AnswerPage          
+        return <AnswerPage 
+          teams = {this.state.settings.teams}         
           closeOnClick={() => this.modalOpenCloseHandleClick(null)} 
           teamOnClick = {(team) => this.teamHandleClick(team)}
           winner= {this.state.winner}/>;
+
+      case 'prizePage':
+        return <PrizePage
+          prize={this.state.prize}
+          closeOnClick={() => this.modalOpenCloseHandleClick(null)} 
+          />
   
       default:
         return null;
