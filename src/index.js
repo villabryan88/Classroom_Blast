@@ -355,12 +355,12 @@ class AnswerPage extends React.Component{
 
     return (
       <Modal closeOnClick= {this.props.closeOnClick}>
-        <div class="answer-page">
-          <div class="who-won">
+        <div class="flex-row">
+          <div class="pick-team">
             <div class="flex-centered title"><FullText noWrap="no" id="whatever">Who won?</FullText></div>            
             <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
-          <div class='flex-centered answer-box'>
+          <div class='flex-centered content-box'>
             <FullText id="answerSize"> {questionsData[questionsIndex]["answer"]}</FullText>
           </div>
         </div>        
@@ -373,7 +373,40 @@ class PrizePage extends React.Component{
   render(){
     return (
       <Modal closeOnClick= {this.props.closeOnClick}>
-        {this.props.prize}
+        <div class="flex-centered full-size prize-page">
+          <div class='flex-centered full-size'>
+            <FullText id="prizeSize"> {this.props.prize}</FullText>
+          </div>
+        </div>        
+      </Modal>
+    )
+  }
+}
+
+class StealPage extends React.Component{
+  render(){
+
+    return (
+      <Modal closeOnClick= {this.props.closeOnClick}>
+        <div class="steal-page flex-row">
+          <div class="pick-team">
+            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Who won?</FullText></div>            
+            <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
+          </div>
+          <div class='flex-centered-column content-box'>
+            <div style={{height: "30%", width: "100%"}}>
+              <ScoreBoard 
+                score={this.props.score} 
+                teams={this.props.teams} 
+              />
+            </div>
+            <FullText id="answerSize"> {this.props.prize}</FullText>
+          </div>
+          <div class="pick-team">
+            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Steal from?</FullText></div>            
+            <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
+          </div>
+        </div>        
       </Modal>
     )
   }
@@ -490,10 +523,10 @@ class Game extends React.Component {
       
 
       switch (prize){
-        // case "stealThree":
-        // case "stealHalf":
-        //   alert("stealPrizePage");
-        //   break;
+        case "stealThree":
+        case "stealHalf":
+          currentModal = "stealPage";
+          break;
         
         default:
           currentModal = "prizePage";
@@ -585,6 +618,15 @@ class Game extends React.Component {
           prize={this.state.prize}
           closeOnClick={() => this.modalOpenCloseHandleClick(null)} 
           />
+      case 'stealPage':
+      return <StealPage
+        teams = {this.state.settings.teams}
+        prize={this.state.prize}
+        closeOnClick={() => this.modalOpenCloseHandleClick(null)}
+        teamOnClick = {(team) => this.teamHandleClick(team)}
+        winner= {this.state.winner}
+        score = {this.state.score}        
+        />
   
       default:
         return null;

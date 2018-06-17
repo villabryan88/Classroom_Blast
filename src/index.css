@@ -21,7 +21,7 @@ body {
   }
   .flex-centered-column {
     box-sizing: border-box;
-    padding: 5%;
+    padding: 2%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -231,26 +231,26 @@ body {
     right: 28px;
   }
 
-  .answer-page {
+  .flex-row {
     display:flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
   }
-  .who-won {
+  .pick-team {
     background-color: lightblue;
     width: 30%;
   }
-  .who-won > .title {
+  .pick-team > .title {
     background-color: lightskyblue;
     width: 100%;
     height: 20%;
   }
-  .who-won > .team-list{
+  .pick-team > .team-list{
     width: 100%;
     height: 80%;
   }
-  .answer-box{
+  .content-box{
     background-color:lightsalmon;
     width: 70%;
   }
@@ -261,6 +261,13 @@ body {
     font-weight: bold;
     text-align: center;    
   }
+  .steal-page > .pick-team{
+    width: 20%;
+  }
+  .steal-page > .content-box {
+    width:60%;
+  }
+
 
 
 
