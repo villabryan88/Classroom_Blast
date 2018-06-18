@@ -390,11 +390,11 @@ class StealPage extends React.Component{
       <Modal closeOnClick= {this.props.closeOnClick}>
         <div class="steal-page flex-row">
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Who won?</FullText></div>            
+            <div class="flex-centered title"><FullText noWrap="no" id="stealWho">Who won?</FullText></div>            
             <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
           <div class='flex-centered-column content-box'>
-            <div style={{height: "30%", width: "100%"}}>
+            <div style={{height: "30%", width: "100%", backgroundColor: "lightblue"}}>
               <ScoreBoard 
                 score={this.props.score} 
                 teams={this.props.teams} 
@@ -403,7 +403,7 @@ class StealPage extends React.Component{
             <FullText id="answerSize"> {this.props.prize}</FullText>
           </div>
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Steal from?</FullText></div>            
+            <div class="flex-centered title"><FullText noWrap="no" id="stealFrom">Steal from?</FullText></div>            
             <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
         </div>        
@@ -431,11 +431,11 @@ class Game extends React.Component {
         currentTeam: 1,
       },
       items: {
-        one: 10,
-        two: 10,
-        three: 10,
-        four: 10,
-        five: 10,
+        one: 0,
+        two: 0,
+        three: 0,
+        four: 0,
+        five: 0,
         stealThree: 10,
         stealHalf: 10,
         enemiesHalf: 10,
