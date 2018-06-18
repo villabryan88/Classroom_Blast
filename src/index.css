@@ -1,18 +1,13 @@
+/* Global */
 body {
     font: 14px "Century Gothic", Futura, sans-serif;
     margin: 0;
     padding: 0;
   }
-
-  .game {
-    display: flex;
-    flex-direction: row;
-  }
   .flex {
     display: flex;
     justify-content: center;
   }
-
   .flex-centered {
     box-sizing: border-box;
     display: flex;
@@ -20,15 +15,22 @@ body {
     align-items: center;
   }
   .flex-centered-column {
-    box-sizing: border-box;
-    padding: 2%;
+    box-sizing: border-box;    
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-content: center;
+  }  
+  .padding {
+    padding: 2%;
   }
 
-
+  .flex-row {
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+  }
   .flex-content {
     flex:1;
   }
@@ -41,38 +43,43 @@ body {
   .flex-left {
     justify-content: flex-start;    
   }
-
   .fill {
     width:80%;
     height:80%;
   }
-
   .full-size {
     width: 100%;
     height: 100%;
   }
 
+  
+
+
+/* Main Page */
+  .game {
+    display: flex;
+    flex-direction: row;
+  }
   .menu-bar-container{
     height: 5vh;
     background-color: lightgreen;
+  }
+  .menu-bar {
+    width: 95%;
   }
   .top-container {
     background-color: lightsalmon;
     height: 20vh;
   }
-
-  .bottom-container {
-    background-color: lightpink;
-    height: 75vh;
-  }
-  .menu-bar {
-    width: 95%;
-  }
   .scoreboard {
     background-color: red;
     justify-content: space-around;
     padding: 0 10px 0 10px;
-    width: 95%;
+    width: 100%;
+  }
+  .bottom-container {
+    background-color: lightpink;
+    height: 75vh;
   }
   .gameboard-wrapper {
     background-color: orange;
@@ -90,11 +97,12 @@ body {
     font-weight: bold;
     text-align: center;    
   }
-
+    /* scoreboard */
   .team-name{
     grid-column: 1 / span 2;
     background-color: lightgreen;
     font-size: 3vh;
+    text-align: center;
   }
   .score {   
     background-color:white;
@@ -145,134 +153,6 @@ body {
     font-size: 2vh;
   }
 
-
-  .modal {
-    display: block; 
-    position: fixed; 
-    z-index: 1; 
-    padding-top: 3vh; 
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: auto;
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
-  }
-  
-  /* Modal Content */
-  .modal-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid rgb(63, 37, 37);
-    width: 80%;
-    height: 88%;
-  }
-  
-  #menu-modal > .modal-content {
-    width: 30vw;
-    height: auto;
-  }
-  
-  /* The Close Button */
-  .close {
-    position: absolute;
-    color: #aaaaaa;
-    top: 19px;
-    right: 28px;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-
-  .menu-grid {
-    display: grid;
-    background-color: lightgoldenrodyellow;
-    border: 1px solid black;
-    grid-gap: 2px;
-    grid-template-columns: repeat(2, 1fr);
-    /* justify-items: center; */
-  }
-  .menu-grid > div {
-    display:flex;
-    background-color: lightpink;
-    justify-content: center;
-    align-items: center;
-  }
-
-
-
-
-  .instructions {
-    background-color: lightcoral;
-    height: 20%;
-  }
-  .question {    
-    background-color: lightblue;
-    height: 60%;
-  }
-  .answer {
-    background-color: lightsalmon;
-    height: 20%;
-  }
-
-  .timer {
-    position: absolute;
-    bottom: 25%;  
-    right: 28px;
-  }
-
-  .flex-row {
-    display:flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-  }
-  .pick-team {
-    background-color: lightblue;
-    width: 30%;
-  }
-  .pick-team > .title {
-    background-color: lightskyblue;
-    width: 100%;
-    height: 20%;
-  }
-  .pick-team > .team-list{
-    width: 100%;
-    height: 80%;
-  }
-  .content-box{
-    background-color:lightsalmon;
-    width: 70%;
-  }
-  .team-button {
-    background-color: "white";
-    border: 1px solid #999;
-    font-size: 5vh;
-    font-weight: bold;
-    text-align: center;    
-  }
-  .steal-page > .pick-team{
-    width: 20%;
-  }
-  .steal-page > .content-box {
-    width:60%;
-  }
-
-
-
-
-
-
   @media (orientation: portrait) {
     .square {
       font-size: 3.5vh;
@@ -297,11 +177,158 @@ body {
     .top-container {
       height: 17vh;
     }
-    #menuModal > .modal-content {
+  }
+/* Modal Global */
+
+  .modal {
+    display: block; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 3vh; 
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+  }
+  .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid rgb(63, 37, 37);
+    width: 80%;
+    height: 88%;
+  }  
+  .close {
+    position: absolute;
+    color: #aaaaaa;
+    top: 19px;
+    right: 28px;
+    font-size: 28px;
+    font-weight: bold;
+  }  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+/* Menu Page  */
+  #menu-modal > .modal-content {
+    width: 30vw;
+    height: auto;
+  }
+  @media (orientation: portrait) {
+    #menu-modal > .modal-content {
       width: 80%;
       height: auto;
     }
   }
+  .menu-grid {
+    display: grid;
+    background-color: lightgoldenrodyellow;
+    border: 1px solid black;
+    grid-gap: 2px;
+    grid-template-columns: repeat(2, 1fr);
+    /* justify-items: center; */
+  }
+  .menu-grid > div {
+    display:flex;
+    background-color: lightpink;
+    justify-content: center;
+    align-items: center;
+  }
+/* Question Page */
+
+  .instructions {
+    background-color: lightcoral;
+    height: 20%;
+  }
+  .question {    
+    background-color: lightblue;
+    height: 60%;
+  }
+  .answer {
+    background-color: lightsalmon;
+    height: 20%;
+  }
+
+  .timer {
+    position: absolute;
+    bottom: 25%;  
+    right: 28px;
+  }
+/* Answer Page */
+  .pick-team {
+    background-color: lightblue;
+    width: 30%;
+  }
+  .pick-team > .title {
+    background-color: lightskyblue;
+    width: 100%;
+    height: 20%;
+  }
+  .pick-team > .team-list{
+    width: 100%;
+    height: 80%;
+  }
+  .content-box{
+    background-color:lightsalmon;
+    width: 70%;
+  }
+  .team-button {
+    background-color: "white";
+    border: 1px solid #999;
+    font-size: 5vh;
+    font-weight: bold;
+    text-align: center;    
+  }
+  @media (orientation: portrait) {
+    .team-button{
+      font-size: 4vh;
+    }
+  }
+/* Steal Page */
+  .steal-page > .pick-team{
+    width: 15%;
+  }
+  .steal-page > .content-box {
+    width:70%;
+  }
+  .steal-page .scorebox {
+    max-width: 7vw;
+  }
+  .steal-page .team-name{
+    font-size: 2vw;
+  }
+  .steal-page .team-button{
+    font-size: 2.5vw;
+  }
+  .steal-page .score {   
+    background-color:white;
+    grid-column: 1 / span 2;
+    font-size: 5vw;
+  }
+  @media (orientation: portrait) {
+    .steal-page .team-button{
+      font-size: 3vh;
+    }
+    .steal-page .team-name{
+      font-size: 2.5vw;
+    }
+
+  }
+
+
+
+
+
+
+
 
 
 

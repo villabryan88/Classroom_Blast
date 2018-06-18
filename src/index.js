@@ -27,6 +27,10 @@ function ScoreBox (props){
   const scoreBoxClass = "scorebox " + ((props.size) || "");
   const teamElement = !props.team ? '' :<div className="flex-centered team-name"> Team {props.team}</div>;
   const scoreHighlight = props.team == props.currentTeam ? {backgroundColor: "lightGreen"}: {};
+  const plusMinus = [
+    <button className="plus-minus" onClick={() => props.plusMinusOnClick("plus")}>+</button>,
+    <button className="plus-minus" onClick={() => props.plusMinusOnClick("minus")}>-</button>
+  ];
 
   return (
     <div className={scoreBoxClass}>
@@ -36,8 +40,7 @@ function ScoreBox (props){
         style={scoreHighlight}>
           {props.value}
       </div>
-      <button className="plus-minus" onClick={() => props.plusMinusOnClick("plus")}>+</button>
-      <button className="plus-minus" onClick={() => props.plusMinusOnClick("minus")}>-</button>
+      {props.plusMinus === false ? "" : plusMinus}
     </div>
   );
 }
@@ -54,14 +57,13 @@ class ScoreBoard extends React.Component{
         key = {i}
         currentTeam = {this.props.currentTeam}
         plusMinusOnClick={(plusMinus) => this.props.scoreOnClick(i, plusMinus, "score")}
+        plusMinus={this.props.plusMinus}
       />;
     }
     return(
-      <div className="flex top-container">
-        <div className="flex-centered scoreboard">
-          {scoreBoard}
-        </div>
-      </div>
+      <div className="flex-centered scoreboard">
+        {scoreBoard}
+      </div>     
     );
   }
 }
@@ -258,7 +260,7 @@ class FullText extends React.Component{
       height: "90%",
       width: "90%",
       textAlign: "center",
-      whiteSpace: this.props.noWrap ? "nowrap": "normal",
+      whiteSpace: this.props.noWrap ? "nowrap" : "normal",
     };
 
     return(
@@ -340,7 +342,7 @@ class TeamList extends React.Component{
     
 
     return(
-      <div class="flex-centered-column team-list">
+      <div class="flex-centered-column padding team-list">
         {teamList}
       </div>
     )
@@ -357,7 +359,7 @@ class AnswerPage extends React.Component{
       <Modal closeOnClick= {this.props.closeOnClick}>
         <div class="flex-row">
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap="no" id="whatever">Who won?</FullText></div>            
+            <div class="flex-centered title"><FullText noWrap={true} id="whatever">Who won?</FullText></div>            
             <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
           <div class='flex-centered content-box'>
@@ -390,20 +392,21 @@ class StealPage extends React.Component{
       <Modal closeOnClick= {this.props.closeOnClick}>
         <div class="steal-page flex-row">
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap="no" id="stealWho">Who won?</FullText></div>            
+            <div class="flex-centered title"><FullText noWrap={true} id="stealWho">Who won?</FullText></div>            
             <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
           <div class='flex-centered-column content-box'>
-            <div style={{height: "30%", width: "100%", backgroundColor: "lightblue"}}>
+            <div class="flex-centered" style={{height: "30%", width: "100%", backgroundColor: "lightblue"}}>
               <ScoreBoard 
                 score={this.props.score} 
-                teams={this.props.teams} 
+                teams={this.props.teams}
+                plusMinus = {false}
               />
             </div>
             <FullText id="answerSize"> {this.props.prize}</FullText>
           </div>
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap="no" id="stealFrom">Steal from?</FullText></div>            
+            <div class="flex-centered title"><FullText noWrap={true} id="stealFrom">Steal from?</FullText></div>            
             <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
         </div>        
@@ -431,11 +434,11 @@ class Game extends React.Component {
         currentTeam: 1,
       },
       items: {
-        one: 0,
-        two: 0,
-        three: 0,
-        four: 0,
-        five: 0,
+        one: 10,
+        two: 10,
+        three: 10,
+        four: 10,
+        five: 10,
         stealThree: 10,
         stealHalf: 10,
         enemiesHalf: 10,
@@ -644,12 +647,14 @@ class Game extends React.Component {
         navigationOnClick = {(plusMinus) => this.plusMinusHandleClick("currentTeam",plusMinus)}
         newGameOnClick = {() => this.reset()}
       />
-      <ScoreBoard 
-        score={this.state.score} 
-        teams={this.state.settings.teams}
-        currentTeam = {this.state.settings.currentTeam}
-        scoreOnClick = {(setting, plusMinus, score) => this.plusMinusHandleClick(setting,plusMinus,score)} 
-      />
+      <div className="flex top-container">
+        <ScoreBoard 
+          score={this.state.score} 
+          teams={this.state.settings.teams}
+          currentTeam = {this.state.settings.currentTeam}
+          scoreOnClick = {(setting, plusMinus, score) => this.plusMinusHandleClick(setting,plusMinus,score)} 
+        />
+      </div>
       <QuestionBoard 
         onClick={(i) => this.squareHandleClick(i)} 
         questions={this.state.questionsToggle} 
