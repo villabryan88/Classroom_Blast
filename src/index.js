@@ -404,7 +404,7 @@ class StealPage extends React.Component{
           </div>
           <div class="pick-team">
             <div class="flex-centered title"><FullText noWrap="no" id="stealFrom">Steal from?</FullText></div>            
-            <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
+            <TeamList teamOnClick={this.props.stealFromOnClick} teams={this.props.teams} />            
           </div>
         </div>        
       </Modal>
@@ -438,7 +438,7 @@ class Game extends React.Component {
         five: 0,
         stealThree: 10,
         stealHalf: 10,
-        enemiesHalf: 10,
+        enemiesHalf: 0,
       }
     };
   }
@@ -580,6 +580,35 @@ class Game extends React.Component {
     return rank;
   }
 
+  steal(targetTeam) {
+    if (this.state.winner === null)
+      return;
+
+    var pointsStolen;
+    const winner = this.state.winner;
+    var score = this.state.score.slice();
+
+    switch (this.state.prize){
+      case "stealHalf":
+        pointsStolen = Math.round(score[targetTeam]/2);
+        score[winner] = score[winner] + pointsStolen;
+        score[targetTeam] = score[targetTeam] - pointsStolen;
+      break;
+
+      case "stealThree":
+        score[winner] = score[winner] + 3;
+        score[targetTeam] = score[targetTeam] - 3;
+      break;
+    }
+
+    this.setState({
+      score: score,
+      winner: null,
+      currentModal: null,
+      priz: null,
+    })
+  }
+
   componentDidMount(){
     window.onclick = (e) => {
       if (e.target.className == "modal") 
@@ -624,6 +653,7 @@ class Game extends React.Component {
         prize={this.state.prize}
         closeOnClick={() => this.modalOpenCloseHandleClick(null)}
         teamOnClick = {(team) => this.teamHandleClick(team)}
+        stealFromOnClick = {(target) => this.steal(target)}
         winner= {this.state.winner}
         score = {this.state.score}        
         />
