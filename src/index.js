@@ -491,7 +491,7 @@ class Game extends React.Component {
     else if (newState[setting] > 0)
       newState[setting] = newState[setting] - 1;
     
-    if (setting="teams" && newState[setting] < 2)
+    if (setting === "teams" && newState[setting] < 2)
       newState[setting] = 2;
 
     //make sure score matches teams
