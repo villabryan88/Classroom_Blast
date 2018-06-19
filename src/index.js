@@ -375,10 +375,15 @@ class PrizePage extends React.Component{
   render(){
     return (
       <Modal closeOnClick= {this.props.closeOnClick}>
-        <div class="flex-centered full-size prize-page">
-          <div class='flex-centered full-size'>
+        <div class="flex-centered-column full-size prize-page">
+          <div class='flex-centered prize'>
             <FullText id="prizeSize"> {this.props.prize}</FullText>
           </div>
+            <Square
+              value={"Continue"}
+              class = "team-button"
+              onClick = {() => this.props.prizeOnClick()}
+            />
         </div>        
       </Modal>
     )
@@ -403,11 +408,11 @@ class StealPage extends React.Component{
                 plusMinus = {false}
               />
             </div>
-            <FullText id="answerSize"> {this.props.prize}</FullText>
+              <FullText id="answerSize"> {this.props.prize}</FullText>            
           </div>
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap={true} id="stealFrom">Steal from?</FullText></div>            
-            <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
+            <div class="flex-centered title"><FullText noWrap="no" id="stealFrom">Steal from?</FullText></div>            
+            <TeamList teamOnClick={this.props.stealFromOnClick} teams={this.props.teams} />            
           </div>
         </div>        
       </Modal>
@@ -422,7 +427,8 @@ class Game extends React.Component {
     super(props);
     this.state = {
       score:  Array(6).fill(0),
-      turnNumber:0,
+      turnNumber:0,                    
+      currentTeam: 1,
       currentQuestion: 0, //maybe set to 0 and have a default blank 0 thing cause of async rendering
       questionsToggle: Array(49).fill(true),
       winner: null, 
@@ -430,8 +436,7 @@ class Game extends React.Component {
       currentModal: null,
       settings: {
         teams: 6,
-        timer: 30,              
-        currentTeam: 1,
+        timer: 30,
       },
       items: {
         one: 10,
@@ -491,12 +496,27 @@ class Game extends React.Component {
     if (state.score.length > state.settings.teams)
       state.score.pop();
 
-    //moving around current team highlighter
-    state.settings.currentTeam = state.settings.currentTeam % state.settings.teams;
-    if (state.settings.currentTeam == 0)
-      state.settings.currentTeam = state.settings.teams;
 
     this.setState(state);
+  }
+
+  navigationHandleClick(plusMinus) {
+    var currentTeam = this.state.currentTeam;
+    var turnNumber = this.state.turnNumber;
+
+    if (plusMinus == "plus")
+    turnNumber += 1;
+    else if (turnNumber > 0)
+    turnNumber -= 1;
+
+    currentTeam = (turnNumber + 1) % this.state.settings.teams;
+    if (currentTeam == 0)
+      currentTeam = this.state.settings.teams;
+
+    this.setState({
+      currentTeam: currentTeam,
+      turnNumber: turnNumber,
+    });
   }
 
   reset() {
@@ -506,12 +526,9 @@ class Game extends React.Component {
       currentQuestion: 0, 
       questionsToggle: Array(49).fill(true),
       winner: null, 
+      currentTeam: 1,
     }
-    var settings = Object.assign({},this.state.settings);
-    settings.currentTeam = 1;
-    state.settings = settings;
-
-
+    
     this.setState(state);
   }
 
@@ -520,7 +537,7 @@ class Game extends React.Component {
   }
 
   teamHandleClick(team){
-    if (this.state.winner === team){
+    if (this.state.winner === team && this.state.currentModal === "answerPage"){
       var prize = this.pickPrize();
       var currentModal;
       
@@ -583,6 +600,69 @@ class Game extends React.Component {
     return rank;
   }
 
+  calcPrize(targetTeam){
+    if (this.state.winner === null)
+    return;
+    const winner = this.state.winner;
+    var score = this.state.score.slice();
+
+    var pointsStolen = 0;
+    var addPoints = 0;
+
+    switch (this.state.prize){
+      case "stealHalf":
+        pointsStolen = Math.round(score[targetTeam]/2);
+      break;
+
+      case "stealThree":
+        pointsStolen = Math.min(3, score[targetTeam]);
+      break;
+
+      case "one":
+      addPoints = 1;
+      break;
+
+      case "two":
+        addPoints = 2;
+      break;
+
+      case "three":
+        addPoints = 3;
+      break;
+
+      case "four":
+        addPoints = 4;
+      break;
+
+      case "five":
+        addPoints = 5;
+      break;
+
+      case "enemiesHalf":
+        score = score.map((points) => Math.round(points/2));
+        score[winner] = this.state.score[winner];
+      break;  
+    }
+    score[winner] += addPoints + pointsStolen;
+    if (targetTeam !== undefined)      
+      score[targetTeam] -= pointsStolen;
+
+    this.setState({
+      currentModal: null,
+      }, () => 
+        setTimeout( () => {
+          this.setState({
+            score: score,
+            winner: null,
+            prize: null,
+          },this.navigationHandleClick("plus"));
+        }
+     ,500)
+    );
+  }
+
+
+
   componentDidMount(){
     window.onclick = (e) => {
       if (e.target.className == "modal") 
@@ -620,6 +700,7 @@ class Game extends React.Component {
         return <PrizePage
           prize={this.state.prize}
           closeOnClick={() => this.modalOpenCloseHandleClick(null)} 
+          prizeOnClick = {() => this.calcPrize()}
           />
       case 'stealPage':
       return <StealPage
@@ -627,6 +708,7 @@ class Game extends React.Component {
         prize={this.state.prize}
         closeOnClick={() => this.modalOpenCloseHandleClick(null)}
         teamOnClick = {(team) => this.teamHandleClick(team)}
+        stealFromOnClick = {(target) => this.calcPrize(target)}
         winner= {this.state.winner}
         score = {this.state.score}        
         />
@@ -644,14 +726,14 @@ class Game extends React.Component {
       <div>
       <MenuBar 
         menuOnClick={() => this.modalOpenCloseHandleClick("menuPage")}
-        navigationOnClick = {(plusMinus) => this.plusMinusHandleClick("currentTeam",plusMinus)}
+        navigationOnClick = {(plusMinus) => this.navigationHandleClick(plusMinus)}
         newGameOnClick = {() => this.reset()}
       />
       <div className="flex top-container">
         <ScoreBoard 
           score={this.state.score} 
           teams={this.state.settings.teams}
-          currentTeam = {this.state.settings.currentTeam}
+          currentTeam = {this.state.currentTeam}
           scoreOnClick = {(setting, plusMinus, score) => this.plusMinusHandleClick(setting,plusMinus,score)} 
         />
       </div>

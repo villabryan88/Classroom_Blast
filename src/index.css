@@ -19,7 +19,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-content: center;
+    align-items: center;
   }  
   .padding {
     padding: 2%;
@@ -275,6 +275,7 @@ body {
   .pick-team > .team-list{
     width: 100%;
     height: 80%;
+    align-items: initial;
   }
   .content-box{
     background-color:lightsalmon;
@@ -320,11 +321,13 @@ body {
     .steal-page .team-name{
       font-size: 2.5vw;
     }
-
   }
+/* Prize Page */
 
-
-
+.prize {
+  height: 90%;
+  width: 100%;
+}
 
 
 
