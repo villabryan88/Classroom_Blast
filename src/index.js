@@ -473,22 +473,26 @@ class Game extends React.Component {
     var settings = Object.assign({},this.state.settings);    
     var items = Object.assign({},this.state.items);
     var state = {};
+    var newState;
     state.score = score;
     state.settings = settings;
     state.items = items;
     
     if (type) 
-      var newState = score;
+      newState = score;
     else if (settings[setting])
-      var newState = settings;
+      newState = settings;
     else
-      var newState = items;
+      newState = items;
     
     
     if (plusMinus == "plus")
       newState[setting] = newState[setting] + 1;
     else if (newState[setting] > 0)
       newState[setting] = newState[setting] - 1;
+    
+    if (setting="teams" && newState[setting] < 2)
+      newState[setting] = 2;
 
     //make sure score matches teams
     if (state.score.length < state.settings.teams)
