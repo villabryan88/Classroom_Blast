@@ -321,6 +321,9 @@ body {
     .steal-page .team-name{
       font-size: 2.5vw;
     }
+    .steal-page .team-button{
+      font-size: 3vw;
+    }
   }
 /* Prize Page */
 

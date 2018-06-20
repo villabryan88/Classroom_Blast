@@ -230,7 +230,7 @@ class FullText extends React.Component{
     var element = document.getElementById(this.props.id);
     var fontSize = this.state.fontSize;
     if (this.state.resize && (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth))
-      this.setState({fontSize: fontSize-5});
+      this.setState({fontSize: fontSize * 0.8});
     else if (this.state.resize)
       this.setState({resize: false})
   }
@@ -260,7 +260,7 @@ class FullText extends React.Component{
       height: "90%",
       width: "90%",
       textAlign: "center",
-      whiteSpace: this.props.noWrap ? "nowrap" : "normal",
+      whiteSpace: this.props.noWrap ? "nowrap" : "normal",      
     };
 
     return(
@@ -397,7 +397,7 @@ class StealPage extends React.Component{
       <Modal closeOnClick= {this.props.closeOnClick}>
         <div class="steal-page flex-row">
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap={true} id="stealWho">Who won?</FullText></div>            
+            <div class="flex-centered title"><FullText id="stealWho">Who won?</FullText></div>            
             <TeamList teamOnClick={this.props.teamOnClick} winner={this.props.winner} teams={this.props.teams} />            
           </div>
           <div class='flex-centered-column content-box'>
@@ -411,7 +411,7 @@ class StealPage extends React.Component{
               <FullText id="answerSize"> {this.props.prize}</FullText>            
           </div>
           <div class="pick-team">
-            <div class="flex-centered title"><FullText noWrap="no" id="stealFrom">Steal from?</FullText></div>            
+            <div class="flex-centered title"><FullText id="stealFrom">Steal from?</FullText></div>            
             <TeamList teamOnClick={this.props.stealFromOnClick} teams={this.props.teams} />            
           </div>
         </div>        
@@ -439,14 +439,14 @@ class Game extends React.Component {
         timer: 30,
       },
       items: {
-        one: 10,
-        two: 10,
-        three: 10,
-        four: 10,
-        five: 10,
+        one: 0,
+        two: 0,
+        three: 0,
+        four: 0,
+        five: 0,
         stealThree: 10,
         stealHalf: 10,
-        enemiesHalf: 10,
+        enemiesHalf: 0,
       }
     };
   }
