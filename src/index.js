@@ -439,14 +439,14 @@ class Game extends React.Component {
         timer: 30,
       },
       items: {
-        one: 0,
-        two: 0,
-        three: 0,
-        four: 0,
-        five: 0,
+        one: 10,
+        two: 15,
+        three: 20,
+        four: 15,
+        five: 10,
         stealThree: 10,
         stealHalf: 10,
-        enemiesHalf: 0,
+        enemiesHalf: 5,
       }
     };
   }
@@ -695,7 +695,8 @@ class Game extends React.Component {
 
       case 'answerPage':
         return <AnswerPage 
-          teams = {this.state.settings.teams}         
+          teams = {this.state.settings.teams}
+          currentQuestion={this.state.currentQuestion}
           closeOnClick={() => this.modalOpenCloseHandleClick(null)} 
           teamOnClick = {(team) => this.teamHandleClick(team)}
           winner= {this.state.winner}/>;
