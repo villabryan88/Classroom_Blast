@@ -439,14 +439,14 @@ class Game extends React.Component {
         timer: 30,
       },
       items: {
-        one: 10,
-        two: 15,
-        three: 20,
-        four: 15,
-        five: 10,
-        stealThree: 10,
-        stealHalf: 10,
-        enemiesHalf: 5,
+        one: 3,
+        two: 4,
+        three: 15,
+        four: 8,
+        five: 5,
+        stealThree: 7,
+        stealHalf: 5,
+        enemiesHalf: 3,
       }
     };
   }
@@ -568,7 +568,7 @@ class Game extends React.Component {
 
   pickPrize (){
     
-    const itemsState = Object.assign({},this.state.items);    
+    var itemsState = Object.assign({},this.state.items);    
     var turnNumber = this.state.turnNumber+1;
     var rank = this.rankScore();
     var prize = ai();
@@ -577,9 +577,12 @@ class Game extends React.Component {
       var items = itemsState;
       const itemsValues = Object.values(items);
       const itemsNames = Object.keys(items);
+
       const reducer = (d,i) => d + i;
       const itemsTotal = itemsValues.reduce(reducer);
+
       const prize = Math.floor(Math.random() * itemsTotal);
+      var prizeName;
       var prizeIterator = 0;
       var prizeIndex;
 
@@ -587,8 +590,15 @@ class Game extends React.Component {
         prizeIndex = i;
         prizeIterator = prizeIterator + itemsValues[i];
       }
-      return itemsNames[prizeIndex];
+
+      prizeName = itemsNames[prizeIndex];
+      
+      itemsState[prizeName] -= 1;        
+
+      return prizeName;
     }
+
+    this.setState({items: itemsState});
 
     return prize;
 
